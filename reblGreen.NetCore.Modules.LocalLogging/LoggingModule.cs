@@ -6,12 +6,14 @@ using reblGreen.NetCore.Modules.LocalLogging.Classes;
 namespace reblGreen.NetCore.Modules.LocalLogging
 {
     /// <summary>
-    ///
+    /// A basic logging module. This module writes all LoggingEvent data to the console output when available and also
+    /// writes error logs to a file in the Module.WorkingDirectory path using log rotation.
     /// </summary>
     [Serializable]
     [Module(
         LoadPriority = short.MaxValue - 1, HandlePriority = short.MinValue,
-        Description = ""
+        Description = "A basic logging module. This module writes all LoggingEvent data to the console output when "
+        + "available and also writes error logs to a file in the Module.WorkingDirectory path using log rotation."
     )]
     public class LoggingModule : Module
     {
