@@ -1,0 +1,4 @@
+{
+  "logFileSize": 100,
+  "logRotationFileCount":  2
+}
