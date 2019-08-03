@@ -19,6 +19,7 @@
   <ItemGroup>
     <None Update="reblGreen.NetCore.Modules.LocalLogging.LoggingModule.settings.default.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Pack>true</Pack>
     </None>
   </ItemGroup>
 
