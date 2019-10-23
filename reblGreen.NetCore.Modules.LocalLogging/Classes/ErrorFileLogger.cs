@@ -36,6 +36,15 @@ namespace reblGreen.NetCore.Modules.LocalLogging.Classes
             Queue = new Queue<string>();
             LogFilePath = Path.Combine(module.WorkingDirectory.LocalPath, $"logs{Path.DirectorySeparatorChar}error.log");
 
+            lock (Queue)
+            {
+                using (StreamWriter sw = new StreamWriter(LogFilePath, true))
+                {
+                    sw.WriteLine($"Initializing error log file for {Module.Host.ApplicationName}");
+                    sw.WriteLine($"Working directory: {Module.WorkingDirectory.LocalPath}");
+                }
+            }
+
             // Kilobytes * megabytes * logfileSize.
             LogFileSize = 1024 * 1024 * logFileSize;
             LogFileCount = logRotationFileCount;
