@@ -26,7 +26,7 @@ namespace reblGreen.NetCore.Modules.LocalLogging.Classes
             Module = module;
             Log.AutoDebug = false;
             Log.AddLogger(new ConsoleLogger());
-            Log.AddLogger(new ErrorFileLogger(Module.WorkingDirectory.LocalPath, logFileSize, logRotationFileCount));
+            Log.AddLogger(new ErrorFileLogger(Module, logFileSize, logRotationFileCount));
         }
 
 

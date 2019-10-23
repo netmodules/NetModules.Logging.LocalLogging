@@ -14,26 +14,27 @@ namespace reblGreen.NetCore.Modules.LocalLogging.Classes
         /// The delay in milliseconds between file writes. Log messages are queued and written in bursts
         /// to reduce system overhead.
         /// </summary>
-        const ushort LogFileWriteDelay = 5000;
+        const ushort LogFileWriteDelay = 5000; // 5 seconds
 
         string LogFilePath;
         int LogFileSize;
         ushort LogFileCount;
         Thread LoggingThread;
-
+        Module Module;
         Queue<string> Queue;
 
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="modulePath">The module path can be found in Module.WorkingDirectory</param>
+        /// <param name="module">The module.</param>
         /// <param name="logFileSize">The size of a log file in megabytes before rotating the log file.</param>
         /// <param name="logRotationFileCount">The number of log rotation files to keep.</param>
-        public ErrorFileLogger(string modulePath, ushort logFileSize, ushort logRotationFileCount)
+        public ErrorFileLogger(Module module, ushort logFileSize, ushort logRotationFileCount)
         {
+            Module = module;
             Queue = new Queue<string>();
-            LogFilePath = Path.Combine(modulePath, $"logs{Path.DirectorySeparatorChar}error.log");
+            LogFilePath = Path.Combine(module.WorkingDirectory.LocalPath, $"logs{Path.DirectorySeparatorChar}error.log");
 
             // Kilobytes * megabytes * logfileSize.
             LogFileSize = 1024 * 1024 * logFileSize;
@@ -58,6 +59,12 @@ namespace reblGreen.NetCore.Modules.LocalLogging.Classes
             LoggingThread.Start();
         }
 
+        // Destructor...
+        ~ErrorFileLogger()
+        {
+            WriteFile(LogFilePath);
+            Rotate(LogFilePath);
+        }
 
         /// <summary>
         /// 
@@ -75,15 +82,21 @@ namespace reblGreen.NetCore.Modules.LocalLogging.Classes
         {
             try
             {
-                using (StreamWriter sw = new StreamWriter(path, true))
+                lock (Queue)
                 {
-                    while (Queue.Count > 0)
+                    using (StreamWriter sw = new StreamWriter(path, true))
                     {
-                        sw.WriteLine(Queue.Dequeue());
+                        while (Queue.Count > 0)
+                        {
+                            sw.WriteLine(Queue.Dequeue());
+                        }
                     }
                 }
             }
-            catch { }
+            catch
+            {
+                Module.Log(Events.LoggingEvent.Severity.Debug, $"Unable to write to log file at {LogFilePath}");
+            }
         }
 
 

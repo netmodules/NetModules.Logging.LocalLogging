@@ -61,7 +61,7 @@ namespace reblGreen.NetCore.Modules.LocalLogging.Classes
         /// </summary>
         internal static string GetDateString()
         {
-            return DateTime.UtcNow.ToString("yyyy-MM-dd-hh:mm:ss");
+            return DateTime.UtcNow.ToString("yyyy-MM-dd-HH:mm:ss.FFF");
         }
     }
 }
