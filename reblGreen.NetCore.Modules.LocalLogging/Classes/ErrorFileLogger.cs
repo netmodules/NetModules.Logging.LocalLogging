@@ -36,6 +36,13 @@ namespace reblGreen.NetCore.Modules.LocalLogging.Classes
             Queue = new Queue<string>();
             LogFilePath = Path.Combine(module.WorkingDirectory.LocalPath, $"logs{Path.DirectorySeparatorChar}error.log");
 
+            var logDir = Path.GetDirectoryName(LogFilePath);
+
+            if (!Directory.Exists(logDir))
+            {
+                Directory.CreateDirectory(logDir);
+            }
+
             lock (Queue)
             {
                 using (StreamWriter sw = new StreamWriter(LogFilePath, true))
