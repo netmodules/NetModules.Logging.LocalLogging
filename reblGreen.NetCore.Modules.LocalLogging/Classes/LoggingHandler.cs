@@ -36,7 +36,7 @@ namespace reblGreen.NetCore.Modules.LocalLogging.Classes
         /// <param name="event"></param>
         internal void LogEvent(LoggingEvent @event)
         {
-            if (@event.Input != null)
+            if (@event.Input.Arguments != null && @event.Input.Arguments.Count > 0)
             {
                 switch (@event.Input.Severity)
                 {
