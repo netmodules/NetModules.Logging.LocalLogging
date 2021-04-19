@@ -13,7 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="reblGreen.Logging" Version="1.0.8" />
+    <PackageReference Include="reblGreen.Logging" Version="1.0.9" />
     <PackageReference Include="reblGreen.NetCore.Modules" Version="1.1.3" />
     <PackageReference Include="reblGreen.Serialization.Json" Version="1.0.7" />
   </ItemGroup>

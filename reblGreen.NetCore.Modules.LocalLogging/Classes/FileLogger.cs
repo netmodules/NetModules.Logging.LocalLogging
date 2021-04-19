@@ -8,7 +8,7 @@ using System.Threading;
 
 namespace reblGreen.NetCore.Modules.LocalLogging.Classes
 {
-    internal class ErrorFileLogger : BaseLogger
+    internal class FileLogger : BaseLogger
     {
         /// <summary>
         /// The delay in milliseconds between file writes. Log messages are queued and written in bursts
@@ -16,6 +16,7 @@ namespace reblGreen.NetCore.Modules.LocalLogging.Classes
         /// </summary>
         const ushort LogFileWriteDelay = 5000; // 5 seconds
 
+        Events.LoggingEvent.Severity MaxLoggingLevel;
         string LogFilePath;
         int LogFileSize;
         ushort LogFileCount;
@@ -30,9 +31,10 @@ namespace reblGreen.NetCore.Modules.LocalLogging.Classes
         /// <param name="module">The module.</param>
         /// <param name="logFileSize">The size of a log file in megabytes before rotating the log file.</param>
         /// <param name="logRotationFileCount">The number of log rotation files to keep.</param>
-        public ErrorFileLogger(Module module, ushort logFileSize, ushort logRotationFileCount)
+        public FileLogger(Module module, ushort logFileSize, ushort logRotationFileCount, Events.LoggingEvent.Severity maxLoggingLevel)
         {
             Module = module;
+            MaxLoggingLevel = maxLoggingLevel;
             Queue = new Queue<string>();
             LogFilePath = Path.Combine(module.WorkingDirectory.LocalPath, $"logs{Path.DirectorySeparatorChar}error.log");
 
@@ -76,7 +78,7 @@ namespace reblGreen.NetCore.Modules.LocalLogging.Classes
         }
 
         // Destructor...
-        ~ErrorFileLogger()
+        ~FileLogger()
         {
             WriteFile(LogFilePath);
             Rotate(LogFilePath);
@@ -88,6 +90,33 @@ namespace reblGreen.NetCore.Modules.LocalLogging.Classes
         public override void Error(params object[] args)
         {
             Queue.Enqueue($"{LoggingHelpers.GetDateString()} {LoggingHelpers.GetPrintableArgs(args)}");
+        }
+
+        public override void Analytic(params object[] args)
+        {
+            if (MaxLoggingLevel == Events.LoggingEvent.Severity.Analytics)
+            {
+                Queue.Enqueue($"{LoggingHelpers.GetDateString()} {LoggingHelpers.GetPrintableArgs(args)}");
+            }
+        }
+
+        public override void Debug(params object[] args)
+        {
+            if (MaxLoggingLevel == Events.LoggingEvent.Severity.Analytics
+                || MaxLoggingLevel == Events.LoggingEvent.Severity.Debug)
+            {
+                Queue.Enqueue($"{LoggingHelpers.GetDateString()} {LoggingHelpers.GetPrintableArgs(args)}");
+            }
+        }
+
+        public override void Information(params object[] args)
+        {
+            if (MaxLoggingLevel == Events.LoggingEvent.Severity.Analytics
+                || MaxLoggingLevel == Events.LoggingEvent.Severity.Debug
+                || MaxLoggingLevel == Events.LoggingEvent.Severity.Warning)
+            {
+                Queue.Enqueue($"{LoggingHelpers.GetDateString()} {LoggingHelpers.GetPrintableArgs(args)}");
+            }
         }
 
         

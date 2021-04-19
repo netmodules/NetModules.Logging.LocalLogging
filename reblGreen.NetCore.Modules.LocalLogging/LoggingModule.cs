@@ -45,7 +45,41 @@ namespace reblGreen.NetCore.Modules.LocalLogging
         {
             var logFileSize = (ushort)GetSetting("logFileSize", 100);
             var logRotationFileCount = (ushort)GetSetting("logRotationFileCount", 10);
-            LoggingHandler = new LoggingHandler(this, logFileSize, logRotationFileCount);
+            var maxLogLevel = LoggingEvent.Severity.Error;
+
+            if (Host.Arguments != null)
+            {
+                for (var i = 0; i < Host.Arguments.Count; i++)
+                {
+                    var arg = Host.Arguments[i].ToLowerInvariant();
+                    if (arg == "-loglevel" || arg == "-log" || arg == "-l")
+                    {
+                        if (Host.Arguments.Count > i)
+                        {
+                            var value = Host.Arguments[i + 1].ToLowerInvariant();
+
+                            switch (value)
+                            {
+                                case "warning":
+                                    maxLogLevel = LoggingEvent.Severity.Warning;
+                                    break;
+                                case "debug":
+                                    maxLogLevel = LoggingEvent.Severity.Debug;
+                                    break;
+                                case "analytics":
+                                    maxLogLevel = LoggingEvent.Severity.Analytics;
+                                    break;
+                                default:
+                                    maxLogLevel = LoggingEvent.Severity.Error;
+                                    break;
+                            }
+                        }
+
+                        break;
+                    }
+                }
+            }
+            LoggingHandler = new LoggingHandler(this, logFileSize, logRotationFileCount, maxLogLevel);
             base.OnLoading();
         }
 

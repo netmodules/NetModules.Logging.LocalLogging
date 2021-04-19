@@ -13,20 +13,19 @@ namespace reblGreen.NetCore.Modules.LocalLogging.Classes
     internal class LoggingHandler
     {
         Module Module;
-
-
+        
         /// <summary>
         /// 
         /// </summary>
         /// <param name="module"></param>
         /// <param name="logFileSize">The size of a log file in megabytes before rotating the log file.</param>
         /// <param name="logRotationFileCount">The number of log rotation files to keep.</param>
-        internal LoggingHandler(Module module, ushort logFileSize, ushort logRotationFileCount)
+        internal LoggingHandler(Module module, ushort logFileSize, ushort logRotationFileCount, LoggingEvent.Severity maxLoggingLevel)
         {
             Module = module;
             Log.AutoDebug = false;
             Log.AddLogger(new ConsoleLogger());
-            Log.AddLogger(new ErrorFileLogger(Module, logFileSize, logRotationFileCount));
+            Log.AddLogger(new FileLogger(Module, logFileSize, logRotationFileCount, maxLoggingLevel));
         }
 
 
@@ -44,7 +43,7 @@ namespace reblGreen.NetCore.Modules.LocalLogging.Classes
                         Log.Analytic(@event.Input.Arguments.ToArray());
                         break;
                     case LoggingEvent.Severity.Debug:
-                        Log.Information(@event.Input.Arguments.ToArray());
+                        Log.Debug(@event.Input.Arguments.ToArray());
                         break;
                     case LoggingEvent.Severity.Error:
                         Log.Error(@event.Input.Arguments.ToArray());
