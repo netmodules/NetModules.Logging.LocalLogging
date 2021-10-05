@@ -1,5 +1,6 @@
 ﻿using reblGreen;
 using reblGreen.NetCore.Modules;
+using reblGreen.NetCore.Modules.Events;
 using System;
 using System.Threading;
 
@@ -21,14 +22,14 @@ namespace Modules.LocalLogging.TestApplication
 
             if (myModule.Count > 0)
             {
-                myModule[0].Log(Events.LoggingEvent.Severity.Debug, "Hello debug!");
-                myModule[0].Log(Events.LoggingEvent.Severity.Warning, "Hello warning!");
-                myModule[0].Log(Events.LoggingEvent.Severity.Error, "Hello error!");
-                myModule[0].Log(Events.LoggingEvent.Severity.Analytics, "Hello analytics!");
+                myModule[0].Log(LoggingEvent.Severity.Debug, "Hello debug!");
+                myModule[0].Log(LoggingEvent.Severity.Warning, "Hello warning!");
+                myModule[0].Log(LoggingEvent.Severity.Error, "Hello error!");
+                myModule[0].Log(LoggingEvent.Severity.Analytics, "Hello analytics!");
 
                 while (true)
                 {
-                    myModule[0].Log(Events.LoggingEvent.Severity.Error, new Exception("This is an error!"), "Hello world!");
+                    myModule[0].Log(LoggingEvent.Severity.Error, new Exception("This is an error!"), "Hello world!");
                     Thread.Sleep(1000);
                 }
             }

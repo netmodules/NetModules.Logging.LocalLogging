@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using reblGreen.NetCore.Modules.Events;
 
 namespace Modules.LocalLogging.Classes
 {
@@ -18,7 +19,7 @@ namespace Modules.LocalLogging.Classes
         /// </summary>
         const ushort LogFileWriteDelay = 5000; // 5 seconds
 
-        Events.LoggingEvent.Severity MaxLoggingLevel;
+        LoggingEvent.Severity MaxLoggingLevel;
         string LogFilePath;
         int LogFileSize;
         ushort LogFileCount;
@@ -33,7 +34,7 @@ namespace Modules.LocalLogging.Classes
         /// <param name="module">The module.</param>
         /// <param name="logFileSize">The size of a log file in megabytes before rotating the log file.</param>
         /// <param name="logRotationFileCount">The number of log rotation files to keep.</param>
-        public FileLogger(Module module, ushort logFileSize, ushort logRotationFileCount, Events.LoggingEvent.Severity maxLoggingLevel)
+        public FileLogger(Module module, ushort logFileSize, ushort logRotationFileCount, LoggingEvent.Severity maxLoggingLevel)
         {
             Module = module;
             MaxLoggingLevel = maxLoggingLevel;
@@ -96,7 +97,7 @@ namespace Modules.LocalLogging.Classes
 
         public override void Analytic(params object[] args)
         {
-            if (MaxLoggingLevel == Events.LoggingEvent.Severity.Analytics)
+            if (MaxLoggingLevel == LoggingEvent.Severity.Analytics)
             {
                 Queue.Enqueue($"{LoggingHelpers.GetDateString()} {LoggingHelpers.GetPrintableArgs(args)}");
             }
@@ -104,8 +105,8 @@ namespace Modules.LocalLogging.Classes
 
         public override void Debug(params object[] args)
         {
-            if (MaxLoggingLevel == Events.LoggingEvent.Severity.Analytics
-                || MaxLoggingLevel == Events.LoggingEvent.Severity.Debug)
+            if (MaxLoggingLevel == LoggingEvent.Severity.Analytics
+                || MaxLoggingLevel == LoggingEvent.Severity.Debug)
             {
                 Queue.Enqueue($"{LoggingHelpers.GetDateString()} {LoggingHelpers.GetPrintableArgs(args)}");
             }
@@ -113,9 +114,9 @@ namespace Modules.LocalLogging.Classes
 
         public override void Information(params object[] args)
         {
-            if (MaxLoggingLevel == Events.LoggingEvent.Severity.Analytics
-                || MaxLoggingLevel == Events.LoggingEvent.Severity.Debug
-                || MaxLoggingLevel == Events.LoggingEvent.Severity.Warning)
+            if (MaxLoggingLevel == LoggingEvent.Severity.Analytics
+                || MaxLoggingLevel == LoggingEvent.Severity.Debug
+                || MaxLoggingLevel == LoggingEvent.Severity.Warning)
             {
                 Queue.Enqueue($"{LoggingHelpers.GetDateString()} {LoggingHelpers.GetPrintableArgs(args)}");
             }
@@ -142,7 +143,7 @@ namespace Modules.LocalLogging.Classes
             }
             catch
             {
-                Module.Log(Events.LoggingEvent.Severity.Debug, $"Unable to write to log file at {LogFilePath}");
+                Module.Log(LoggingEvent.Severity.Debug, $"Unable to write to log file at {LogFilePath}");
             }
         }
 
