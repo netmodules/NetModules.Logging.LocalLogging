@@ -1,10 +1,12 @@
-﻿using reblGreen.NetCore.Modules.Interfaces;
+﻿using reblGreen;
+using reblGreen.NetCore.Modules;
+using reblGreen.NetCore.Modules.Interfaces;
 using reblGreen.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace reblGreen.NetCore.Modules.LocalLogging.Classes
+namespace Modules.LocalLogging.Classes
 {
     internal static class LoggingHelpers
     {

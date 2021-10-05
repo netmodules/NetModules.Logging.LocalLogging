@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.421
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "reblGreen.NetCore.Modules.LocalLogging", "reblGreen.NetCore.Modules.LocalLogging\reblGreen.NetCore.Modules.LocalLogging.csproj", "{4DBDFFAC-CFAA-4D64-B860-73E4272C96D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Modules.LocalLogging", "Modules.LocalLogging\Modules.LocalLogging.csproj", "{4DBDFFAC-CFAA-4D64-B860-73E4272C96D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "reblGreen.NetCore.Modules.LocalLogging.TestApplication", "reblGreen.NetCore.Modules.LocalLogging.TestApplication\reblGreen.NetCore.Modules.LocalLogging.TestApplication.csproj", "{0C91DBBB-A456-4724-BF48-F68CBB280F03}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modules.LocalLogging.TestApplication", "Modules.LocalLogging.TestApplication\Modules.LocalLogging.TestApplication.csproj", "{0C91DBBB-A456-4724-BF48-F68CBB280F03}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

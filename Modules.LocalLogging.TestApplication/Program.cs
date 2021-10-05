@@ -1,7 +1,9 @@
-﻿using System;
+﻿using reblGreen;
+using reblGreen.NetCore.Modules;
+using System;
 using System.Threading;
 
-namespace reblGreen.NetCore.Modules.LocalLogging.TestApplication
+namespace Modules.LocalLogging.TestApplication
 {
     class Program
     {

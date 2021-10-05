@@ -1,9 +1,11 @@
-﻿using System;
+﻿using reblGreen;
+using reblGreen.NetCore.Modules;
+using System;
 using reblGreen.NetCore.Modules.Events;
 using reblGreen.NetCore.Modules.Interfaces;
-using reblGreen.NetCore.Modules.LocalLogging.Classes;
+using Modules.LocalLogging.Classes;
 
-namespace reblGreen.NetCore.Modules.LocalLogging
+namespace Modules.LocalLogging
 {
     /// <summary>
     /// A basic logging module. This module writes all LoggingEvent data to the console output when available and also

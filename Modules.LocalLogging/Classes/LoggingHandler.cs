@@ -1,4 +1,6 @@
-﻿using System;
+﻿using reblGreen;
+using reblGreen.NetCore.Modules;
+using System;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -7,7 +9,7 @@ using reblGreen.Logging;
 using reblGreen.Serialization;
 using reblGreen.NetCore.Modules.Events;
 
-namespace reblGreen.NetCore.Modules.LocalLogging.Classes
+namespace Modules.LocalLogging.Classes
 {
     [Serializable]
     internal class LoggingHandler

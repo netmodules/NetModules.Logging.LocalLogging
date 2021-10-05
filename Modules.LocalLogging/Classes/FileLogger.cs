@@ -1,4 +1,6 @@
-﻿using reblGreen.Logging;
+﻿using reblGreen;
+using reblGreen.NetCore.Modules;
+using reblGreen.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 
-namespace reblGreen.NetCore.Modules.LocalLogging.Classes
+namespace Modules.LocalLogging.Classes
 {
     internal class FileLogger : BaseLogger
     {

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -13,11 +13,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\reblGreen.NetCore.Modules.LocalLogging\reblGreen.NetCore.Modules.LocalLogging.csproj" />
+    <ProjectReference Include="..\Modules.LocalLogging\Modules.LocalLogging.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="reblGreen.NetCore.Modules.LocalLogging.LoggingModule.settings.json">
+    <None Update="Modules.LocalLogging.LoggingModule.settings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

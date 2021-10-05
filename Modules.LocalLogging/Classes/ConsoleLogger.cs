@@ -1,4 +1,6 @@
-﻿using System;
+﻿using reblGreen;
+using reblGreen.NetCore.Modules;
+using System;
 using System.Text;
 using System.Collections.Generic;
 using reblGreen.Logging;
@@ -6,7 +8,7 @@ using System.Linq;
 using reblGreen.NetCore.Modules.Interfaces;
 using reblGreen.Serialization;
 
-namespace reblGreen.NetCore.Modules.LocalLogging.Classes
+namespace Modules.LocalLogging.Classes
 {
     internal class ConsoleLogger : ILogger
     {
