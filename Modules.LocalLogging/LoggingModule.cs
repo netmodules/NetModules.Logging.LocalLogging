@@ -13,7 +13,7 @@ namespace Modules.LocalLogging
     /// </summary>
     [Serializable]
     [Module(
-        LoadPriority = short.MaxValue - 1, HandlePriority = short.MinValue,
+        LoadFirst = true, LoadPriority = short.MinValue + 1, HandlePriority = short.MaxValue,
         Description = "A basic logging module. This module writes all LoggingEvent data to the console output when "
         + "available and also writes error logs to a file in the Module.WorkingDirectory path using log rotation."
     )]
