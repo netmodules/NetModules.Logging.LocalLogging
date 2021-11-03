@@ -25,7 +25,7 @@ namespace Modules.LocalLogging.TestApplication
                 myModule[0].Log(LoggingEvent.Severity.Debug, "Hello debug!");
                 myModule[0].Log(LoggingEvent.Severity.Warning, "Hello warning!");
                 myModule[0].Log(LoggingEvent.Severity.Error, "Hello error!");
-                myModule[0].Log(LoggingEvent.Severity.Analytics, "Hello analytics!");
+                myModule[0].Log(LoggingEvent.Severity.Information, "Hello information!");
 
                 while (true)
                 {

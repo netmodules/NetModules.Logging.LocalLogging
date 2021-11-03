@@ -97,7 +97,7 @@ namespace Modules.LocalLogging.Classes
 
         public override void Analytic(params object[] args)
         {
-            if (MaxLoggingLevel == LoggingEvent.Severity.Analytics)
+            if (MaxLoggingLevel == LoggingEvent.Severity.Information)
             {
                 Queue.Enqueue($"{LoggingHelpers.GetDateString()} {LoggingHelpers.GetPrintableArgs(args)}");
             }
@@ -105,7 +105,7 @@ namespace Modules.LocalLogging.Classes
 
         public override void Debug(params object[] args)
         {
-            if (MaxLoggingLevel == LoggingEvent.Severity.Analytics
+            if (MaxLoggingLevel == LoggingEvent.Severity.Information
                 || MaxLoggingLevel == LoggingEvent.Severity.Debug)
             {
                 Queue.Enqueue($"{LoggingHelpers.GetDateString()} {LoggingHelpers.GetPrintableArgs(args)}");
@@ -114,7 +114,7 @@ namespace Modules.LocalLogging.Classes
 
         public override void Information(params object[] args)
         {
-            if (MaxLoggingLevel == LoggingEvent.Severity.Analytics
+            if (MaxLoggingLevel == LoggingEvent.Severity.Information
                 || MaxLoggingLevel == LoggingEvent.Severity.Debug
                 || MaxLoggingLevel == LoggingEvent.Severity.Warning)
             {

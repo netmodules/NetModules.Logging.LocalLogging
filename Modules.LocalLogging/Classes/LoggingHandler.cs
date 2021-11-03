@@ -41,7 +41,7 @@ namespace Modules.LocalLogging.Classes
             {
                 switch (@event.Input.Severity)
                 {
-                    case LoggingEvent.Severity.Analytics:
+                    case LoggingEvent.Severity.Information:
                         Log.Analytic(@event.Input.Arguments.ToArray());
                         break;
                     case LoggingEvent.Severity.Debug:

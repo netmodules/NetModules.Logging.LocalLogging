@@ -47,7 +47,7 @@ namespace Modules.LocalLogging
         {
             var logFileSize = (ushort)GetSetting("logFileSize", 100);
             var logRotationFileCount = (ushort)GetSetting("logRotationFileCount", 10);
-            var maxLogLevel = LoggingEvent.Severity.Error;
+            var maxLogLevel = LoggingEvent.Severity.Debug;
 
             if (Host.Arguments != null)
             {
@@ -69,7 +69,9 @@ namespace Modules.LocalLogging
                                     maxLogLevel = LoggingEvent.Severity.Debug;
                                     break;
                                 case "analytics":
-                                    maxLogLevel = LoggingEvent.Severity.Analytics;
+                                case "information":
+                                case "info":
+                                    maxLogLevel = LoggingEvent.Severity.Information;
                                     break;
                                 default:
                                     maxLogLevel = LoggingEvent.Severity.Error;
