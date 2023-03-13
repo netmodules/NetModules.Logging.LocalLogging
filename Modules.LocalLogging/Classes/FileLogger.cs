@@ -1,5 +1,5 @@
 ﻿using reblGreen;
-using reblGreen.NetCore.Modules;
+using NetModules;
 using reblGreen.Logging;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using reblGreen.NetCore.Modules.Events;
+using NetModules.Events;
 
 namespace Modules.LocalLogging.Classes
 {
@@ -132,7 +132,7 @@ namespace Modules.LocalLogging.Classes
             {
                 lock (Queue)
                 {
-                    using (StreamWriter sw = new StreamWriter(path, true))
+                    using (StreamWriter sw = new StreamWriter(path, true, Encoding.UTF8))
                     {
                         while (Queue.Count > 0)
                         {
@@ -146,6 +146,48 @@ namespace Modules.LocalLogging.Classes
                 Module.Log(LoggingEvent.Severity.Debug, $"Unable to write to log file at {LogFilePath}");
             }
         }
+
+
+        internal string ReadFile(ushort lines)
+        {
+            if (lines == 0)
+            {
+                lines = 1;
+            }
+
+            var charsize = Encoding.UTF8.GetByteCount("\n");
+            var buffer = Encoding.UTF8.GetBytes("\n");
+            var count = 0;
+
+            using (FileStream stream = new FileStream(LogFilePath, FileMode.Open))
+            {
+                var endpos = stream.Length / charsize;
+
+                for (var pos = charsize; pos < endpos; pos += charsize)
+                {
+                    stream.Seek(-pos, SeekOrigin.End);
+                    stream.Read(buffer, 0, buffer.Length);
+
+                    if (Encoding.UTF8.GetString(buffer) == "\n")
+                    {
+                        if (count >= lines)
+                        {
+                            buffer = new byte[stream.Length - stream.Position];
+                            stream.Read(buffer, 0, buffer.Length);
+                            return Encoding.UTF8.GetString(buffer);
+                        }
+
+                        count++;
+                    }
+                }
+
+                stream.Seek(0, SeekOrigin.Begin);
+                buffer = new byte[stream.Length];
+                stream.Read(buffer, 0, buffer.Length);
+                return Encoding.UTF8.GetString(buffer);
+            }
+        }
+
 
 
         /// <summary>

@@ -1,5 +1,5 @@
 ﻿using reblGreen;
-using reblGreen.NetCore.Modules;
+using NetModules;
 namespace Modules.LocalLogging.TestApplication
 {
     class BasicModuleHost : ModuleHost

@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.421
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Modules.LocalLogging", "Modules.LocalLogging\Modules.LocalLogging.csproj", "{4DBDFFAC-CFAA-4D64-B860-73E4272C96D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modules.LocalLogging.TestApplication", "Modules.LocalLogging.TestApplication\Modules.LocalLogging.TestApplication.csproj", "{0C91DBBB-A456-4724-BF48-F68CBB280F03}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Modules.LocalLogging.TestApplication", "Modules.LocalLogging.TestApplication\Modules.LocalLogging.TestApplication.csproj", "{0C91DBBB-A456-4724-BF48-F68CBB280F03}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetModules.Logging.LocalLogging.Events", "NetModules.Logging.LocalLogging.Events\NetModules.Logging.LocalLogging.Events.csproj", "{BA331B59-5865-4683-BF79-567F731D7E22}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{0C91DBBB-A456-4724-BF48-F68CBB280F03}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C91DBBB-A456-4724-BF48-F68CBB280F03}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0C91DBBB-A456-4724-BF48-F68CBB280F03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA331B59-5865-4683-BF79-567F731D7E22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA331B59-5865-4683-BF79-567F731D7E22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA331B59-5865-4683-BF79-567F731D7E22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA331B59-5865-4683-BF79-567F731D7E22}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

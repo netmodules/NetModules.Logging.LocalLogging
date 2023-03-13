@@ -1,11 +1,11 @@
 ﻿using reblGreen;
-using reblGreen.NetCore.Modules;
+using NetModules;
 using System;
 using System.Text;
 using System.Collections.Generic;
 using reblGreen.Logging;
 using System.Linq;
-using reblGreen.NetCore.Modules.Interfaces;
+using NetModules.Interfaces;
 using reblGreen.Serialization;
 
 namespace Modules.LocalLogging.Classes

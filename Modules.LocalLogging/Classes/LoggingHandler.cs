@@ -1,5 +1,5 @@
 ﻿using reblGreen;
-using reblGreen.NetCore.Modules;
+using NetModules;
 using System;
 using System.IO;
 using System.Linq;
@@ -7,7 +7,8 @@ using System.Text;
 using System.Collections.Generic;
 using reblGreen.Logging;
 using reblGreen.Serialization;
-using reblGreen.NetCore.Modules.Events;
+using NetModules.Events;
+using NetModules.Logging.LocalLogging.Events;
 
 namespace Modules.LocalLogging.Classes
 {
@@ -15,7 +16,8 @@ namespace Modules.LocalLogging.Classes
     internal class LoggingHandler
     {
         Module Module;
-        
+        FileLogger FileLogger;
+
         /// <summary>
         /// 
         /// </summary>
@@ -27,7 +29,9 @@ namespace Modules.LocalLogging.Classes
             Module = module;
             Log.AutoDebug = false;
             Log.AddLogger(new ConsoleLogger());
-            Log.AddLogger(new FileLogger(Module, logFileSize, logRotationFileCount, maxLoggingLevel));
+
+            FileLogger = new FileLogger(Module, logFileSize, logRotationFileCount, maxLoggingLevel);
+            Log.AddLogger(FileLogger);
         }
 
 
@@ -55,6 +59,20 @@ namespace Modules.LocalLogging.Classes
                         break;
                 }
             }
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="event"></param>
+        internal void ReadEvent(ReadLoggingFileEvent @event)
+        {
+            @event.Output = new ReadLoggingFileEventOutput
+            {
+                Log = FileLogger.ReadFile(@event.Input.Lines)
+            };
+            @event.Handled= true;
         }
     }
 }

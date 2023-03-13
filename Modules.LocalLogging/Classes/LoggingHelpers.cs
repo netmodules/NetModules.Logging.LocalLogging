@@ -1,6 +1,6 @@
 ﻿using reblGreen;
-using reblGreen.NetCore.Modules;
-using reblGreen.NetCore.Modules.Interfaces;
+using NetModules;
+using NetModules.Interfaces;
 using reblGreen.Serialization;
 using System;
 using System.Collections.Generic;

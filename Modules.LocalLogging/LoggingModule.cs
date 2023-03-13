@@ -1,9 +1,10 @@
 ﻿using reblGreen;
-using reblGreen.NetCore.Modules;
+using NetModules;
 using System;
-using reblGreen.NetCore.Modules.Events;
-using reblGreen.NetCore.Modules.Interfaces;
+using NetModules.Events;
+using NetModules.Interfaces;
 using Modules.LocalLogging.Classes;
+using NetModules.Logging.LocalLogging.Events;
 
 namespace Modules.LocalLogging
 {
@@ -23,7 +24,8 @@ namespace Modules.LocalLogging
 
         public override bool CanHandle(IEvent e)
         {
-            if (e is LoggingEvent)
+            if (e is LoggingEvent
+                || e is ReadLoggingFileEvent)
             {
                 return true;
             }
@@ -40,6 +42,12 @@ namespace Modules.LocalLogging
                 // We purposely leave the event unhandled so it can be pushed to any other modules which may wish to
                 // handle LoggingEvent events.
                 @event.Handled = false;
+                return;
+            }
+
+            if (e is ReadLoggingFileEvent read)
+            {
+                LoggingHandler.ReadEvent(read);
             }
         }
 

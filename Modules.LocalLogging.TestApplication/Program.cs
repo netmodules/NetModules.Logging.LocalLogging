@@ -1,6 +1,7 @@
-﻿using reblGreen;
-using reblGreen.NetCore.Modules;
-using reblGreen.NetCore.Modules.Events;
+﻿using NetModules.Logging.LocalLogging.Events;
+using reblGreen;
+using NetModules;
+using NetModules.Events;
 using System;
 using System.Threading;
 
@@ -31,6 +32,16 @@ namespace Modules.LocalLogging.TestApplication
                 {
                     myModule[0].Log(LoggingEvent.Severity.Error, new Exception("This is an error!"), "Hello world!");
                     Thread.Sleep(1000);
+
+                    var read = new ReadLoggingFileEvent
+                    {
+                        Input = new ReadLoggingFileEventInput
+                        {
+                            Lines = 10,
+                        }
+                    };
+
+                    host.Handle(read);
                 }
             }
 
