@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>John Earnshaw</Authors>
+    <Copyright>John Earnshaw</Copyright>
+    <Description>A basic logging module. This module writes all LoggingEvent data to the console output where available and also writes error logs to a file in the Module.WorkingDirectory path using log rotation.</Description>
+    <Version>1.2.8</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+	<PackageReference Include="NetModules" Version="1.2.8" />
+    <PackageReference Include="NetTools.Logging" Version="1.1.0" />
+    <PackageReference Include="NetTools.Serialization.Json" Version="1.1.5" />
+    <PackageReference Include="Modules.Logging.LocalLogging.Events" Version="1.2.8" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Modules.Logging.LocalLogging.Events\Modules.Logging.LocalLogging.Events.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Modules.Logging.LocalLogging.LoggingModule.settings.default.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Pack>true</Pack>
+	  <PackageCopyToOutput>true</PackageCopyToOutput>
+    </None>
+  </ItemGroup>
+
+</Project>

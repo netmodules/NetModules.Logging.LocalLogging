@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
@@ -12,5 +12,6 @@
 
   <ItemGroup>
 	<PackageReference Include="NetModules" Version="1.2.8" />
+	<PackageReference Include="NetTools.Serialization.JsonSchema" Version="1.1.4" />
   </ItemGroup>
 </Project>

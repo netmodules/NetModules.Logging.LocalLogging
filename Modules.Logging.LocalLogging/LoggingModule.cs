@@ -1,12 +1,11 @@
-﻿using reblGreen;
+﻿using System;
 using NetModules;
-using System;
 using NetModules.Events;
 using NetModules.Interfaces;
-using Modules.LocalLogging.Classes;
-using NetModules.Logging.LocalLogging.Events;
+using Modules.Logging.LocalLogging.Classes;
+using Modules.Logging.LocalLogging.Events;
 
-namespace Modules.LocalLogging
+namespace Modules.Logging.LocalLogging
 {
     /// <summary>
     /// A basic logging module. This module writes all LoggingEvent data to the console output when available and also

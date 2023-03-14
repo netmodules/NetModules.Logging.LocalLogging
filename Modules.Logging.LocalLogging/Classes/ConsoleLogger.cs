@@ -1,14 +1,13 @@
-﻿using reblGreen;
-using NetModules;
-using System;
+﻿using System;
 using System.Text;
 using System.Collections.Generic;
-using reblGreen.Logging;
 using System.Linq;
+using NetModules;
+using NetTools.Logging;
 using NetModules.Interfaces;
-using reblGreen.Serialization;
+using NetTools.Serialization;
 
-namespace Modules.LocalLogging.Classes
+namespace Modules.Logging.LocalLogging.Classes
 {
     internal class ConsoleLogger : ILogger
     {

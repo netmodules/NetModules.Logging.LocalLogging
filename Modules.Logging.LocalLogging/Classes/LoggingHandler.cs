@@ -1,16 +1,15 @@
-﻿using reblGreen;
-using NetModules;
+﻿using NetModules;
 using System;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Collections.Generic;
-using reblGreen.Logging;
-using reblGreen.Serialization;
+using NetTools.Logging;
+using NetTools.Serialization;
 using NetModules.Events;
-using NetModules.Logging.LocalLogging.Events;
+using Modules.Logging.LocalLogging.Events;
 
-namespace Modules.LocalLogging.Classes
+namespace Modules.Logging.LocalLogging.Classes
 {
     [Serializable]
     internal class LoggingHandler

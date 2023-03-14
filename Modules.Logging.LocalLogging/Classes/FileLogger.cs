@@ -1,15 +1,14 @@
-﻿using reblGreen;
-using NetModules;
-using reblGreen.Logging;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using NetModules;
 using NetModules.Events;
+using NetTools.Logging;
 
-namespace Modules.LocalLogging.Classes
+namespace Modules.Logging.LocalLogging.Classes
 {
     internal class FileLogger : BaseLogger
     {

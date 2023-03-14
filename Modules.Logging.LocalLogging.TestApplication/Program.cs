@@ -1,11 +1,10 @@
-﻿using NetModules.Logging.LocalLogging.Events;
-using reblGreen;
+﻿using System;
+using System.Threading;
 using NetModules;
 using NetModules.Events;
-using System;
-using System.Threading;
+using Modules.Logging.LocalLogging.Events;
 
-namespace Modules.LocalLogging.TestApplication
+namespace Modules.Logging.LocalLogging.TestApplication
 {
     class Program
     {

@@ -9,16 +9,16 @@
 
   <ItemGroup>
     <PackageReference Include="NetModules" Version="1.2.8" />
-    <PackageReference Include="Modules.LocalSettings" Version="1.2.6" />
+    <PackageReference Include="Modules.Settings.LocalSettings" Version="1.2.8" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Modules.LocalLogging\Modules.LocalLogging.csproj" />
-    <ProjectReference Include="..\NetModules.Logging.LocalLogging.Events\NetModules.Logging.LocalLogging.Events.csproj" />
+    <ProjectReference Include="..\Modules.Logging.LocalLogging\Modules.Logging.LocalLogging.csproj" />
+    <ProjectReference Include="..\Modules.Logging.LocalLogging.Events\Modules.Logging.LocalLogging.Events.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Modules.LocalLogging.LoggingModule.settings.json">
+    <None Update="Modules.Logging.LocalLogging.LoggingModule.settings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

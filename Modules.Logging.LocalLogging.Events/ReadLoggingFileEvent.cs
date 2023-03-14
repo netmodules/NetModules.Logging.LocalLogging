@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 
-namespace NetModules.Logging.LocalLogging.Events
+namespace Modules.Logging.LocalLogging.Events
 {
     public class ReadLoggingFileEvent : IEvent<ReadLoggingFileEventInput, ReadLoggingFileEventOutput>
     {

@@ -1,12 +1,11 @@
-﻿using reblGreen;
+﻿using System;
+using System.Text;
+using System.Collections.Generic;
 using NetModules;
 using NetModules.Interfaces;
-using reblGreen.Serialization;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using NetTools.Serialization;
 
-namespace Modules.LocalLogging.Classes
+namespace Modules.Logging.LocalLogging.Classes
 {
     internal static class LoggingHelpers
     {

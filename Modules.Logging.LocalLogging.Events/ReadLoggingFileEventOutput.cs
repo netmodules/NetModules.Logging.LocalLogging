@@ -2,7 +2,7 @@
 using System;
 using System.ComponentModel.Design;
 
-namespace NetModules.Logging.LocalLogging.Events
+namespace Modules.Logging.LocalLogging.Events
 {
     public class ReadLoggingFileEventOutput : IEventOutput
     {
