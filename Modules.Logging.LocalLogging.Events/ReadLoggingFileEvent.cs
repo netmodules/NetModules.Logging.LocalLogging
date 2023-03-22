@@ -1,38 +1,21 @@
-﻿using NetModules;
-using NetModules.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using NetModules;
+using NetTools.Serialization.JsonSchemaAttributes;
+using NetTools.Serialization.JsonSchemaEnums;
 
 namespace Modules.Logging.LocalLogging.Events
 {
-    public class ReadLoggingFileEvent : IEvent<ReadLoggingFileEventInput, ReadLoggingFileEventOutput>
+    /// <summary>
+    /// This event is handled by the Modules.Logging.LocalLogging.LoggingModule and allows you to read lines
+    /// from the local logging file.
+    /// </summary>
+    [JsonSchemaTitle("Read Logging File Event")]
+    [JsonSchemaDescription("This event is handled by the Modules.Logging.LocalLogging.LoggingModule and allows you to read lines from the local logging file.")]
+    public class ReadLoggingFileEvent : Event<ReadLoggingFileEventInput, ReadLoggingFileEventOutput>
     {
-        public ReadLoggingFileEventInput Input { get; set; }
-        public ReadLoggingFileEventOutput Output { get; set; }
-
-        public EventName Name => "Logging.LocalLogging.ReadLoggingFile";
-
-        public Dictionary<string, object> Meta { get; set; }
-        
-        public bool Handled { get; set; }
-
-        public IEventInput GetEventInput()
-        {
-            return Input;
-        }
-
-        public IEventOutput GetEventOutput()
-        {
-            return Output;
-        }
-
-        public void SetEventOutput(IEventOutput output)
-        {
-            if (output is ReadLoggingFileEventOutput logging)
-            {
-                Output = logging;
-            }
-        }
+        /// <inheritdoc/>
+        public override EventName Name => "Logging.LocalLogging.ReadLoggingFile";
     }
 }
