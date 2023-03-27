@@ -1,4 +1,11 @@
 ﻿{
+  /*
+    This is the maximum file size (in megabytes) that the current log file can grow to before rotating.
+  */
   "logFileSize": 100,
-  "logRotationFileCount":  2
+
+  /*
+    Enables you to set the maximum number of rotation files to store before deleting a rotation file.
+  */
+  "logRotationFileCount": 2
 }

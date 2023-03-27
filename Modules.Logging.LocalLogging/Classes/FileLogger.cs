@@ -131,11 +131,14 @@ namespace Modules.Logging.LocalLogging.Classes
             {
                 lock (Queue)
                 {
-                    using (StreamWriter sw = new StreamWriter(path, true, Encoding.UTF8))
+                    if (Queue.Count > 0)
                     {
-                        while (Queue.Count > 0)
+                        using (StreamWriter sw = new StreamWriter(path, true, Encoding.UTF8))
                         {
-                            sw.WriteLine(Queue.Dequeue());
+                            while (Queue.Count > 0)
+                            {
+                                sw.WriteLine(Queue.Dequeue());
+                            }
                         }
                     }
                 }
