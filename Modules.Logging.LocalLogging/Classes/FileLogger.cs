@@ -157,36 +157,23 @@ namespace Modules.Logging.LocalLogging.Classes
                 lines = 1;
             }
 
-            var charsize = Encoding.UTF8.GetByteCount("\n");
-            var buffer = Encoding.UTF8.GetBytes("\n");
-            var count = 0;
-
+            
             using (FileStream stream = new FileStream(LogFilePath, FileMode.Open))
             {
-                var endpos = stream.Length / charsize;
+                
+                stream.Seek(0, SeekOrigin.End);
 
-                for (var pos = charsize; pos < endpos; pos += charsize)
+                int newLines = 0;
+                while (newLines < lines + 1 && stream.Position != 0)
                 {
-                    stream.Seek(-pos, SeekOrigin.End);
-                    stream.Read(buffer, 0, buffer.Length);
-
-                    if (Encoding.UTF8.GetString(buffer) == "\n")
-                    {
-                        if (count >= lines)
-                        {
-                            buffer = new byte[stream.Length - stream.Position];
-                            stream.Read(buffer, 0, buffer.Length);
-                            return Encoding.UTF8.GetString(buffer);
-                        }
-
-                        count++;
-                    }
+                    stream.Seek(-1, SeekOrigin.Current);
+                    newLines += stream.ReadByte() == '\n' ? 1 : 0; // look for \n
+                    stream.Seek(-1, SeekOrigin.Current);
                 }
 
-                stream.Seek(0, SeekOrigin.Begin);
-                buffer = new byte[stream.Length];
+                byte[] buffer = new byte[stream.Length - stream.Position];
                 stream.Read(buffer, 0, buffer.Length);
-                return Encoding.UTF8.GetString(buffer);
+                return Encoding.UTF8.GetString(buffer).TrimStart();
             }
         }
 
