@@ -50,7 +50,7 @@ namespace Modules.Logging.LocalLogging
             }
         }
 
-        public override void OnLoading()
+        public override void OnLoaded()
         {
             var logFileSize = (ushort)GetSetting("logFileSize", 100);
             var logRotationFileCount = (ushort)GetSetting("logRotationFileCount", 10);
@@ -91,11 +91,11 @@ namespace Modules.Logging.LocalLogging
                 }
             }
             LoggingHandler = new LoggingHandler(this, logFileSize, logRotationFileCount, maxLogLevel);
-            base.OnLoading();
+            base.OnLoaded();
         }
 
 
-        public override void OnLoaded()
+        public override void OnLoading()
         {
             base.OnLoaded();
         }
