@@ -36,11 +36,11 @@ namespace Modules.Logging.LocalLogging
         {
             if (e is LoggingEvent @event)
             {
-                LoggingHandler.LogEvent(@event);
+                if (LoggingHandler != null)
+                {
+                    LoggingHandler.LogEvent(@event);
+                }
 
-                // We purposely leave the event unhandled so it can be pushed to any other modules which may wish to
-                // handle LoggingEvent events.
-                @event.Handled = false;
                 return;
             }
 
