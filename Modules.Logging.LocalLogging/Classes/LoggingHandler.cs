@@ -64,14 +64,53 @@ namespace Modules.Logging.LocalLogging.Classes
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="event"></param>
-        internal void ReadEvent(ReadLoggingFileEvent @event)
+        /// <param name="e"></param>
+        internal void LastEvent(LastLineEvent e)
         {
-            @event.Output = new ReadLoggingFileEventOutput
+            e.Output = new ReadLoggingFileEventOutput
             {
-                Log = FileLogger.ReadFile(@event.Input.Lines)
+                Log = FileLogger.GetLastLine()
             };
-            @event.Handled= true;
+            e.Handled = true;
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="e"></param>
+        internal void SetLevelEvent(SetLoggingLevelEvent e)
+        {
+            FileLogger.SetMaxLoggingLevel(e.Input.Severity);
+            e.Handled = true;
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="e"></param>
+        internal void ReadEvent(ReadLoggingFileEvent e)
+        {
+            e.Output = new ReadLoggingFileEventOutput
+            {
+                Log = FileLogger.ReadFile(e.Input.Lines, e.Input.SkipLines)
+            };
+            e.Handled= true;
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="e"></param>
+        internal void SearchEvent(SearchLoggingFileEvent e)
+        {
+            e.Output = new ReadLoggingFileEventOutput
+            {
+                Log = FileLogger.SearchFile(e.Input.Query, e.Input.MaxLines)
+            };
+            e.Handled = true;
         }
     }
 }

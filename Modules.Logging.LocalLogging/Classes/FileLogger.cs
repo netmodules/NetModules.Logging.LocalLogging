@@ -22,10 +22,10 @@ namespace Modules.Logging.LocalLogging.Classes
         string LogFilePath;
         int LogFileSize;
         ushort LogFileCount;
-        Thread LoggingThread;
+        Timer LoggingThread;
         Module Module;
         Queue<string> Queue;
-
+        string LastLine;
 
         /// <summary>
         /// 
@@ -36,9 +36,9 @@ namespace Modules.Logging.LocalLogging.Classes
         public FileLogger(Module module, ushort logFileSize, ushort logRotationFileCount, LoggingEvent.Severity maxLoggingLevel)
         {
             Module = module;
-            MaxLoggingLevel = maxLoggingLevel;
             Queue = new Queue<string>();
             LogFilePath = Path.Combine(module.WorkingDirectory.LocalPath, $"logs{Path.DirectorySeparatorChar}error.log");
+            SetMaxLoggingLevel(maxLoggingLevel);
 
             var logDir = Path.GetDirectoryName(LogFilePath);
 
@@ -47,12 +47,16 @@ namespace Modules.Logging.LocalLogging.Classes
                 Directory.CreateDirectory(logDir);
             }
 
+            Rotate(LogFilePath);
+
             lock (Queue)
             {
                 using (StreamWriter sw = new StreamWriter(LogFilePath, true))
                 {
-                    sw.WriteLine($"Initializing error log file for {Module.Host.ApplicationName}");
-                    sw.WriteLine($"Working directory: {Module.WorkingDirectory.LocalPath}");
+                    sw.WriteLine($"{LoggingHelpers.GetDateString()}: {Module.ModuleAttributes.Name}");
+                    sw.WriteLine($">Initializing error log file for {Module.Host.ApplicationName}");
+                    sw.WriteLine($">Working directory: {Module.WorkingDirectory.LocalPath}");
+                    sw.WriteLine();
                 }
             }
 
@@ -61,29 +65,28 @@ namespace Modules.Logging.LocalLogging.Classes
             LogFileCount = logRotationFileCount;
 
             // Create and start the log file writing thread.
-            LoggingThread = new Thread(() =>
+            LoggingThread = new Timer((state) =>
             {
-                while (true)
-                {
-                    WriteFile(LogFilePath);
-                    Rotate(LogFilePath);
-                    Thread.Sleep(LogFileWriteDelay);
-                }
-            })
-            {
-                IsBackground = true,
-                Name = "LoggingThread",
-                Priority = ThreadPriority.Lowest
-            };
-
-            LoggingThread.Start();
+                WriteFile(LogFilePath);
+                Rotate(LogFilePath);
+            }, null, 0, LogFileWriteDelay);
         }
 
         // Destructor...
         ~FileLogger()
         {
             WriteFile(LogFilePath);
-            Rotate(LogFilePath);
+            //Rotate(LogFilePath);
+        }
+
+        internal string GetLastLine()
+        {
+            return LastLine;
+        }
+
+        internal void SetMaxLoggingLevel(LoggingEvent.Severity maxLoggingLevel)
+        {
+            MaxLoggingLevel = maxLoggingLevel;
         }
 
         /// <summary>
@@ -91,33 +94,46 @@ namespace Modules.Logging.LocalLogging.Classes
         /// </summary>
         public override void Error(params object[] args)
         {
-            Queue.Enqueue($"{LoggingHelpers.GetDateString()} {LoggingHelpers.GetPrintableArgs(args)}");
+            var line = $"{LoggingHelpers.GetDateString()} {LoggingHelpers.GetPrintableArgs(args)}";
+            LastLine = line;
+
+            Queue.Enqueue(line);
         }
 
         public override void Analytic(params object[] args)
         {
+            var line = $"{LoggingHelpers.GetDateString()} {LoggingHelpers.GetPrintableArgs(args)}";
+            LastLine = line;
+
+
             if (MaxLoggingLevel == LoggingEvent.Severity.Information)
             {
-                Queue.Enqueue($"{LoggingHelpers.GetDateString()} {LoggingHelpers.GetPrintableArgs(args)}");
+                Queue.Enqueue(line);
             }
         }
 
         public override void Debug(params object[] args)
         {
+            var line = $"{LoggingHelpers.GetDateString()} {LoggingHelpers.GetPrintableArgs(args)}";
+            LastLine = line;
+
             if (MaxLoggingLevel == LoggingEvent.Severity.Information
                 || MaxLoggingLevel == LoggingEvent.Severity.Debug)
             {
-                Queue.Enqueue($"{LoggingHelpers.GetDateString()} {LoggingHelpers.GetPrintableArgs(args)}");
+                Queue.Enqueue(line);
             }
         }
 
         public override void Information(params object[] args)
         {
+            var line = $"{LoggingHelpers.GetDateString()} {LoggingHelpers.GetPrintableArgs(args)}";
+            LastLine = line;
+
             if (MaxLoggingLevel == LoggingEvent.Severity.Information
                 || MaxLoggingLevel == LoggingEvent.Severity.Debug
                 || MaxLoggingLevel == LoggingEvent.Severity.Warning)
             {
-                Queue.Enqueue($"{LoggingHelpers.GetDateString()} {LoggingHelpers.GetPrintableArgs(args)}");
+                Queue.Enqueue(line);
             }
         }
 
@@ -129,6 +145,7 @@ namespace Modules.Logging.LocalLogging.Classes
         {
             try
             {
+                // Put a lock on the queue to stop file reads while writing log file...
                 lock (Queue)
                 {
                     if (Queue.Count > 0)
@@ -150,30 +167,117 @@ namespace Modules.Logging.LocalLogging.Classes
         }
 
 
-        internal string ReadFile(ushort lines)
+        internal string ReadFile(ushort lines, ulong skipLines = 0)
         {
             if (lines == 0)
             {
                 lines = 1;
             }
 
-            
-            using (FileStream stream = new FileStream(LogFilePath, FileMode.Open))
+            // Multiply by 2 to account for newline spacing...
+            lines = (ushort)Math.Clamp(lines * 2, 2, ushort.MaxValue);
+            skipLines = skipLines * 2;
+
+            // Put a lock on the queue to stop file writes while reading log file...
+            lock (Queue)
             {
-                
-                stream.Seek(0, SeekOrigin.End);
-
-                int newLines = 0;
-                while (newLines < lines + 1 && stream.Position != 0)
+                using (FileStream stream = new FileStream(LogFilePath, FileMode.Open))
                 {
-                    stream.Seek(-1, SeekOrigin.Current);
-                    newLines += stream.ReadByte() == '\n' ? 1 : 0; // look for \n
-                    stream.Seek(-1, SeekOrigin.Current);
-                }
+                    ulong skipCount = 0;
+                    long skipPosition = 0;
+                    int newLines = 0;
+                    int lastByte = 0;
 
-                byte[] buffer = new byte[stream.Length - stream.Position];
-                stream.Read(buffer, 0, buffer.Length);
-                return Encoding.UTF8.GetString(buffer).TrimStart();
+                    stream.Seek(0, SeekOrigin.End);
+                    
+                    while (newLines < lines + 1 && stream.Position != 0)
+                    {
+                        stream.Seek(-1, SeekOrigin.Current);
+                        var currentByte = stream.ReadByte();
+
+                        // look for \n (newline)...
+                        if (currentByte == '\n')
+                        {
+                            if (lastByte != '>' || stream.Position == 1)
+                            {
+                                if (skipCount < skipLines)
+                                {
+                                    skipCount++;
+                                    skipPosition = stream.Position;
+                                }
+                                else
+                                {
+                                    newLines++;
+                                }
+                            }
+                        }
+
+                        lastByte = currentByte;
+                        stream.Seek(-1, SeekOrigin.Current);
+                    }
+
+                    byte[] buffer = new byte[skipPosition > 0 ? stream.Length - (stream.Length - skipPosition) - stream.Position : stream.Length - stream.Position];
+                    stream.Read(buffer,0, buffer.Length);
+                    return Encoding.UTF8.GetString(buffer).TrimStart();
+                }
+            }
+        }
+
+
+        internal string SearchFile(string query, ushort maxLines = 0)
+        {
+            if (maxLines == 0)
+            {
+                maxLines = 1;
+            }
+
+            List<string> lines = new List<string>();
+
+            // Put a lock on the queue to stop file writes while reading log file...
+            lock (Queue)
+            {
+                using (FileStream stream = new FileStream(LogFilePath, FileMode.Open))
+                {
+                    //long lineCount = 0;
+                    long lastLinePosition = stream.Length;
+                    long linePosition = stream.Length;
+                    int lastByte = 0;
+
+                    stream.Seek(0, SeekOrigin.End);
+
+                    while (lines.Count < maxLines && stream.Position != 0)
+                    {
+                        stream.Seek(-1, SeekOrigin.Current);
+                        var currentByte = stream.ReadByte();
+
+                        // look for \n (newline)...
+                        if (currentByte == '\n')
+                        {
+                            if (lastByte != '>' || stream.Position == 1)
+                            {
+                                lastLinePosition = linePosition;
+                                linePosition = stream.Position;
+
+                                byte[] buffer = new byte[lastLinePosition - linePosition];
+                                stream.Read(buffer, 0, buffer.Length);
+
+                                var s = Encoding.UTF8.GetString(buffer).Trim();
+
+                                if (s.Contains(query, StringComparison.OrdinalIgnoreCase))
+                                {
+                                    lines.Add(s);
+                                }
+
+                                stream.Position = linePosition;
+                            }
+                        }
+
+                        lastByte = currentByte;
+                        stream.Seek(-1, SeekOrigin.Current);
+                    }
+
+                    return string.Join('\n', lines);
+                }
             }
         }
 
@@ -202,12 +306,15 @@ namespace Modules.Logging.LocalLogging.Classes
 
             var rotatedPath = path.Replace(".log", $".log.{DateTime.UtcNow.Ticks}", StringComparison.OrdinalIgnoreCase);
 
-            try
+            // Put a lock on the queue to stop file read/write while moving log file rotation...
+            lock (Queue)
             {
-                File.Move(path, rotatedPath);
+                try
+                {
+                    File.Move(path, rotatedPath);
+                }
+                catch { }
             }
-            catch { }
-
             
             if (rotated.Count() < LogFileCount - 1)
             {

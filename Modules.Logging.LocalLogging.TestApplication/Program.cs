@@ -26,6 +26,18 @@ namespace Modules.Logging.LocalLogging.TestApplication
                 myModule[0].Log(LoggingEvent.Severity.Warning, "Hello warning!");
                 myModule[0].Log(LoggingEvent.Severity.Error, "Hello error!");
                 myModule[0].Log(LoggingEvent.Severity.Information, "Hello information!");
+                myModule[0].Log(LoggingEvent.Severity.Debug, "Hello debug!");
+                myModule[0].Log(LoggingEvent.Severity.Warning, "Hello warning!");
+                myModule[0].Log(LoggingEvent.Severity.Error, "Hello error!");
+                myModule[0].Log(LoggingEvent.Severity.Information, "Hello information!");
+                myModule[0].Log(LoggingEvent.Severity.Debug, "Hello debug!");
+                myModule[0].Log(LoggingEvent.Severity.Warning, "Hello warning!");
+                myModule[0].Log(LoggingEvent.Severity.Error, "Hello error!");
+                myModule[0].Log(LoggingEvent.Severity.Information, "Hello information!");
+                myModule[0].Log(LoggingEvent.Severity.Debug, "Hello debug!");
+                myModule[0].Log(LoggingEvent.Severity.Warning, "Hello warning!");
+                myModule[0].Log(LoggingEvent.Severity.Error, "Hello error!");
+                myModule[0].Log(LoggingEvent.Severity.Information, "Hello information!");
 
                 while (true)
                 {
@@ -41,6 +53,33 @@ namespace Modules.Logging.LocalLogging.TestApplication
                     };
 
                     host.Handle(read);
+
+                    var read2 = new ReadLoggingFileEvent
+                    {
+                        Input = new ReadLoggingFileEventInput
+                        {
+                            Lines = 10,
+                            SkipLines = 9,
+                        }
+                    };
+
+                    host.Handle(read2);
+
+
+                    var search = new SearchLoggingFileEvent
+                    {
+                        Input = new SearchLoggingFileEventInput
+                        {
+                            Query = "this",
+                            MaxLines = 2,
+                        }
+                    };
+
+                    host.Handle(search);
+
+
+                    var last = new LastLineEvent();
+                    host.Handle(last);
                 }
             }
 

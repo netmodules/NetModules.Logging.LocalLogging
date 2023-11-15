@@ -24,7 +24,10 @@ namespace Modules.Logging.LocalLogging
         public override bool CanHandle(IEvent e)
         {
             if (e is LoggingEvent
-                || e is ReadLoggingFileEvent)
+                || e is LastLineEvent
+                || e is ReadLoggingFileEvent
+                || e is SearchLoggingFileEvent
+                || e is SetLoggingLevelEvent)
             {
                 return true;
             }
@@ -44,9 +47,28 @@ namespace Modules.Logging.LocalLogging
                 return;
             }
 
+            if (e is LastLineEvent last)
+            {
+                LoggingHandler.LastEvent(last);
+                return;
+            }
+
             if (e is ReadLoggingFileEvent read)
             {
                 LoggingHandler.ReadEvent(read);
+                return;
+            }
+
+            if (e is SearchLoggingFileEvent search)
+            {
+                LoggingHandler.SearchEvent(search);
+                return;
+            }
+
+            if (e is SetLoggingLevelEvent set)
+            {
+                LoggingHandler.SetLevelEvent(set);
+                return;
             }
         }
 
@@ -69,9 +91,6 @@ namespace Modules.Logging.LocalLogging
 
                             switch (value)
                             {
-                                case "warning":
-                                    maxLogLevel = LoggingEvent.Severity.Warning;
-                                    break;
                                 case "debug":
                                     maxLogLevel = LoggingEvent.Severity.Debug;
                                     break;
@@ -79,6 +98,9 @@ namespace Modules.Logging.LocalLogging
                                 case "information":
                                 case "info":
                                     maxLogLevel = LoggingEvent.Severity.Information;
+                                    break;
+                                case "warning":
+                                    maxLogLevel = LoggingEvent.Severity.Warning;
                                     break;
                                 default:
                                     maxLogLevel = LoggingEvent.Severity.Error;
@@ -90,6 +112,7 @@ namespace Modules.Logging.LocalLogging
                     }
                 }
             }
+
             LoggingHandler = new LoggingHandler(this, logFileSize, logRotationFileCount, maxLogLevel);
             base.OnLoaded();
         }

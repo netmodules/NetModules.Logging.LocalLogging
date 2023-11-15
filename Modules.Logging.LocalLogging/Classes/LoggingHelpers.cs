@@ -21,8 +21,15 @@ namespace Modules.Logging.LocalLogging.Classes
 
             var sb = new StringBuilder();
 
-            foreach (var arg in args)
+            for (var i = 0; i < args.Length; i++)
             {
+                var arg = args[i];
+
+                if (arg == null || arg is string s && string.IsNullOrWhiteSpace(s))
+                {
+                    continue;
+                }
+
                 if (arg is Exception ex)
                 {
                     sb.Append(UnwrapExceptionMessage(ex));
@@ -37,6 +44,10 @@ namespace Modules.Logging.LocalLogging.Classes
                 }
 
                 sb.Append('\n');
+                if (i < args.Length - 1)
+                {
+                    sb.Append('>');
+                }
             }
 
             return sb.ToString();
