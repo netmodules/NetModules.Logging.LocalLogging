@@ -26,26 +26,46 @@ namespace Modules.Logging.LocalLogging.Classes
 
         public void Analytic(params object[] args)
         {
-            LogDate(ConsoleColor.Green, "analytic");
-            LogArgs(args);
+            var logArgs = LoggingHelpers.GetPrintableArgs(args);
+
+            if (!string.IsNullOrWhiteSpace(logArgs))
+            {
+                LogDate(ConsoleColor.Cyan, "information");
+                LogString(logArgs);
+            }
         }
 
         public void Debug(params object[] args)
         {
-            LogDate(DefaultColor, "debug");
-            LogArgs(args);
+            var logArgs = LoggingHelpers.GetPrintableArgs(args);
+
+            if (!string.IsNullOrWhiteSpace(logArgs))
+            {
+                LogDate(ConsoleColor.Cyan, "debug");
+                LogString(logArgs);
+            }
         }
 
         public void Error(params object[] args)
         {
-            LogDate(ConsoleColor.Red, "error");
-            LogArgs(args);
+            var logArgs = LoggingHelpers.GetPrintableArgs(args);
+
+            if (!string.IsNullOrWhiteSpace(logArgs))
+            {
+                LogDate(ConsoleColor.Cyan, "error");
+                LogString(logArgs);
+            }
         }
 
         public void Information(params object[] args)
         {
-            LogDate(ConsoleColor.Cyan, "information");
-            LogArgs(args);
+            var logArgs = LoggingHelpers.GetPrintableArgs(args);
+
+            if (!string.IsNullOrWhiteSpace(logArgs))
+            {
+                LogDate(ConsoleColor.Cyan, "warning");
+                LogString(logArgs);
+            }
         }
 
         
@@ -54,16 +74,16 @@ namespace Modules.Logging.LocalLogging.Classes
             if (HasConsole)
             {
                 Console.ForegroundColor = color;
-                Console.WriteLine($"{LoggingHelpers.GetDateString()} {logType.ToUpperInvariant()}:");
+                Console.WriteLine($"{LoggingHelpers.GetDateString()}> {logType.ToUpperInvariant()}:");
                 Console.ForegroundColor = DefaultColor;
             }
         }
 
-        void LogArgs(params object[] args)
+        void LogString(string str)
         {
             if (HasConsole)
             {
-                Console.WriteLine(LoggingHelpers.GetPrintableArgs(args));
+                Console.WriteLine(str);
             }
         }
 

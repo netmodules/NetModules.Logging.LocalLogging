@@ -44,6 +44,7 @@ namespace Modules.Logging.LocalLogging.Classes
                 }
 
                 sb.Append('\n');
+
                 if (i < args.Length - 1)
                 {
                     sb.Append('>');
@@ -64,16 +65,16 @@ namespace Modules.Logging.LocalLogging.Classes
                 return string.Empty;
             }
 
-            return $"{ex}, Inner exception: {UnwrapExceptionMessage(ex.InnerException)} ";
+            return $"{ex.ToString().Replace('\n', '>')}{(ex.InnerException != null ? $", Inner exception: {UnwrapExceptionMessage(ex.InnerException)}" : string.Empty)}";
         }
 
 
         /// <summary>
         /// Returns a formatted utc date/time string.
         /// </summary>
-        internal static string GetDateString()
+        internal static string GetDateString(bool includeMicrosecond = false)
         {
-            return DateTime.UtcNow.ToString("yyyy-MM-dd-HH:mm:ss.FFF");
+            return DateTime.UtcNow.ToString("yyyy-MM-dd-HH:mm:ss" + (includeMicrosecond ? ".FFF" : string.Empty));
         }
     }
 }

@@ -67,7 +67,7 @@ namespace Modules.Logging.LocalLogging.Classes
             // Create and start the log file writing thread.
             LoggingThread = new Timer((state) =>
             {
-                WriteFile(LogFilePath);
+                Write(LogFilePath);
                 Rotate(LogFilePath);
             }, null, 0, LogFileWriteDelay);
         }
@@ -75,7 +75,7 @@ namespace Modules.Logging.LocalLogging.Classes
         // Destructor...
         ~FileLogger()
         {
-            WriteFile(LogFilePath);
+            Write(LogFilePath);
             //Rotate(LogFilePath);
         }
 
@@ -94,7 +94,7 @@ namespace Modules.Logging.LocalLogging.Classes
         /// </summary>
         public override void Error(params object[] args)
         {
-            var line = $"{LoggingHelpers.GetDateString()} {LoggingHelpers.GetPrintableArgs(args)}";
+            var line = $"{LoggingHelpers.GetDateString()}> ERROR: {LoggingHelpers.GetPrintableArgs(args)}";
             LastLine = line;
 
             Queue.Enqueue(line);
@@ -102,7 +102,7 @@ namespace Modules.Logging.LocalLogging.Classes
 
         public override void Analytic(params object[] args)
         {
-            var line = $"{LoggingHelpers.GetDateString()} {LoggingHelpers.GetPrintableArgs(args)}";
+            var line = $"{LoggingHelpers.GetDateString()}> INFORMATION: {LoggingHelpers.GetPrintableArgs(args)}";
             LastLine = line;
 
 
@@ -114,7 +114,7 @@ namespace Modules.Logging.LocalLogging.Classes
 
         public override void Debug(params object[] args)
         {
-            var line = $"{LoggingHelpers.GetDateString()} {LoggingHelpers.GetPrintableArgs(args)}";
+            var line = $"{LoggingHelpers.GetDateString()}> DEBUG: {LoggingHelpers.GetPrintableArgs(args)}";
             LastLine = line;
 
             if (MaxLoggingLevel == LoggingEvent.Severity.Information
@@ -126,7 +126,7 @@ namespace Modules.Logging.LocalLogging.Classes
 
         public override void Information(params object[] args)
         {
-            var line = $"{LoggingHelpers.GetDateString()} {LoggingHelpers.GetPrintableArgs(args)}";
+            var line = $"{LoggingHelpers.GetDateString()}> WARNING: {LoggingHelpers.GetPrintableArgs(args)}";
             LastLine = line;
 
             if (MaxLoggingLevel == LoggingEvent.Severity.Information
@@ -141,7 +141,7 @@ namespace Modules.Logging.LocalLogging.Classes
         /// <summary>
         /// 
         /// </summary>
-        internal void WriteFile(string path)
+        internal void Write(string path)
         {
             try
             {
@@ -154,7 +154,12 @@ namespace Modules.Logging.LocalLogging.Classes
                         {
                             while (Queue.Count > 0)
                             {
-                                sw.WriteLine(Queue.Dequeue());
+                                var current = Queue.Dequeue();
+
+                                if (!string.IsNullOrWhiteSpace(current))
+                                {
+                                    sw.WriteLine();
+                                }
                             }
                         }
                     }
@@ -167,7 +172,7 @@ namespace Modules.Logging.LocalLogging.Classes
         }
 
 
-        internal string ReadFile(ushort lines, ulong skipLines = 0)
+        internal string Read(ushort lines, ulong skipLines = 0)
         {
             if (lines == 0)
             {
@@ -224,7 +229,7 @@ namespace Modules.Logging.LocalLogging.Classes
         }
 
 
-        internal string SearchFile(string query, ushort maxLines = 0)
+        internal string Search(string query, ushort maxLines = 0)
         {
             if (maxLines == 0)
             {

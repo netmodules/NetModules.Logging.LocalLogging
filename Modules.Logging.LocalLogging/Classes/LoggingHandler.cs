@@ -94,7 +94,7 @@ namespace Modules.Logging.LocalLogging.Classes
         {
             e.Output = new ReadLoggingFileEventOutput
             {
-                Log = FileLogger.ReadFile(e.Input.Lines, e.Input.SkipLines)
+                Log = FileLogger.Read(e.Input.Lines, e.Input.SkipLines)
             };
             e.Handled= true;
         }
@@ -108,7 +108,7 @@ namespace Modules.Logging.LocalLogging.Classes
         {
             e.Output = new ReadLoggingFileEventOutput
             {
-                Log = FileLogger.SearchFile(e.Input.Query, e.Input.MaxLines)
+                Log = FileLogger.Search(e.Input.Query, e.Input.MaxLines)
             };
             e.Handled = true;
         }
