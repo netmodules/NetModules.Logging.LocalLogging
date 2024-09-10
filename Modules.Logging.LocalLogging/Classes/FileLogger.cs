@@ -37,7 +37,7 @@ namespace Modules.Logging.LocalLogging.Classes
         {
             Module = module;
             Queue = new Queue<string>();
-            LogFilePath = Path.Combine(module.WorkingDirectory.LocalPath, $"logs{Path.DirectorySeparatorChar}error.log");
+            LogFilePath = Path.Combine(module.WorkingDirectory.LocalPath, "logs", "error.log");
             SetMaxLoggingLevel(maxLoggingLevel);
 
             var logDir = Path.GetDirectoryName(LogFilePath);
@@ -158,7 +158,7 @@ namespace Modules.Logging.LocalLogging.Classes
 
                                 if (!string.IsNullOrWhiteSpace(current))
                                 {
-                                    sw.WriteLine();
+                                    sw.WriteLine(current);
                                 }
                             }
                         }
