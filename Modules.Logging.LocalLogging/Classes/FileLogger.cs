@@ -203,8 +203,7 @@ namespace Modules.Logging.LocalLogging.Classes
                     ulong skipCount = 0;
                     long skipPosition = 0;
                     int newLines = 0;
-                    int lastByte = 0;
-
+                    
                     stream.Seek(0, SeekOrigin.Begin);
 
                     while (newLines < lines + 1 && stream.Position != stream.Length)
@@ -235,7 +234,7 @@ namespace Modules.Logging.LocalLogging.Classes
 
                     byte[] buffer = new byte[stream.Position - skipPosition];
 
-                    stream.Seek(0, SeekOrigin.Begin);
+                    stream.Seek(skipPosition, SeekOrigin.Begin);
                     stream.Read(buffer, 0, buffer.Length);
                     return Encoding.UTF8.GetString(buffer).Trim();
                 }
