@@ -1,4 +1,5 @@
 ﻿using System;
+using Modules.Logging.LocalLogging.Events.Enums;
 using NetModules.Interfaces;
 using NetTools.Serialization.JsonSchemaAttributes;
 
@@ -27,5 +28,14 @@ namespace Modules.Logging.LocalLogging.Events
         [JsonSchemaDefault(0)]
         [JsonSchemaDescription("Select the number of lines you wish to skip from the local logging file.")]
         public ulong SkipLines { get; set; }
+
+
+        /// <summary>
+        /// You can select whether to read log file from the start of the file (Head) or
+        /// from the end of the file (Tail).
+        /// </summary>
+        [JsonSchemaTitle("Read Mode")]
+        [JsonSchemaDescription("You can select whether to read log file from the start of the file (Head) or from the end of the file (Tail).")]
+        public ReadMode ReadMode { get; set; }
     }
 }

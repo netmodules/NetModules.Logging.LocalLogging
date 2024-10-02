@@ -76,38 +76,39 @@ namespace Modules.Logging.LocalLogging
         {
             var logFileSize = (ushort)GetSetting("logFileSize", 100);
             var logRotationFileCount = (ushort)GetSetting("logRotationFileCount", 10);
-            var maxLogLevel = LoggingEvent.Severity.Debug;
+            var logLevel = GetSetting("logLevel", string.Empty);
+            var maxLogLevel = !string.IsNullOrEmpty(logLevel)
+                && Enum.TryParse<LoggingEvent.Severity>(logLevel, true, out var ll)
+                ? ll
+                : LoggingEvent.Severity.Information;
 
             if (Host.Arguments != null)
             {
                 for (var i = 0; i < Host.Arguments.Count; i++)
                 {
                     var arg = Host.Arguments[i].ToLowerInvariant();
-                    if (arg == "-loglevel" || arg == "-log" || arg == "-l")
+                    if ((arg == "-loglevel" || arg == "-log" || arg == "-l") && Host.Arguments.Count > i)
                     {
-                        if (Host.Arguments.Count > i)
+                        var value = Host.Arguments[i + 1].ToLowerInvariant();
+
+                        switch (value.Trim('"'))
                         {
-                            var value = Host.Arguments[i + 1].ToLowerInvariant();
-
-                            switch (value)
-                            {
-                                case "debug":
-                                    maxLogLevel = LoggingEvent.Severity.Debug;
-                                    break;
-                                case "analytics":
-                                case "information":
-                                case "info":
-                                    maxLogLevel = LoggingEvent.Severity.Information;
-                                    break;
-                                case "warning":
-                                    maxLogLevel = LoggingEvent.Severity.Warning;
-                                    break;
-                                default:
-                                    maxLogLevel = LoggingEvent.Severity.Error;
-                                    break;
-                            }
+                            case "debug":
+                                maxLogLevel = LoggingEvent.Severity.Debug;
+                                break;
+                            case "analytics":
+                            case "information":
+                            case "info":
+                                maxLogLevel = LoggingEvent.Severity.Information;
+                                break;
+                            case "warning":
+                                maxLogLevel = LoggingEvent.Severity.Warning;
+                                break;
+                            default:
+                                maxLogLevel = LoggingEvent.Severity.Error;
+                                break;
                         }
-
+                        
                         break;
                     }
                 }

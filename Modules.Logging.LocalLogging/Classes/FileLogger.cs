@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using Modules.Logging.LocalLogging.Events.Enums;
 using NetModules;
 using NetModules.Events;
 using NetTools.Logging;
@@ -172,7 +173,77 @@ namespace Modules.Logging.LocalLogging.Classes
         }
 
 
-        internal string Read(ushort lines, ulong skipLines = 0)
+        internal string Read(ushort lines, ulong skipLines = 0, ReadMode mode = ReadMode.Tail)
+        {
+            if (mode == ReadMode.Tail)
+            {
+                return ReadUp(lines, skipLines);
+            }
+
+            return ReadDown(lines, skipLines);
+        }
+
+
+        internal string ReadDown(ushort lines, ulong skipLines = 0)
+        {
+            if (lines == 0)
+            {
+                lines = 1;
+            }
+
+            // Multiply by 2 to account for newline spacing...
+            lines = (ushort)Math.Clamp(lines * 2, 2, ushort.MaxValue);
+            skipLines = skipLines * 2;
+
+            // Put a lock on the queue to stop file writes while reading log file...
+            lock (Queue)
+            {
+                using (FileStream stream = new FileStream(LogFilePath, FileMode.Open))
+                {
+                    ulong skipCount = 0;
+                    long skipPosition = 0;
+                    int newLines = 0;
+                    int lastByte = 0;
+
+                    stream.Seek(0, SeekOrigin.Begin);
+
+                    while (newLines < lines + 1 && stream.Position != stream.Length)
+                    {
+                        var currentByte = stream.ReadByte();
+
+                        // look for \n (newline)...
+                        if (currentByte == '\n')
+                        {
+                            if (stream.ReadByte() == '>')
+                            {
+                                continue;
+                            }
+
+                            if (skipCount < skipLines)
+                            {
+                                skipCount++;
+                                skipPosition = stream.Position;
+                            }
+                            else
+                            {
+                                newLines++;
+                            }
+                        }
+                    }
+
+                    stream.Seek(-1, SeekOrigin.Current);
+
+                    byte[] buffer = new byte[stream.Position - skipPosition];
+
+                    stream.Seek(0, SeekOrigin.Begin);
+                    stream.Read(buffer, 0, buffer.Length);
+                    return Encoding.UTF8.GetString(buffer).Trim();
+                }
+            }
+        }
+
+
+        internal string ReadUp(ushort lines, ulong skipLines = 0)
         {
             if (lines == 0)
             {
@@ -223,7 +294,7 @@ namespace Modules.Logging.LocalLogging.Classes
 
                     byte[] buffer = new byte[skipPosition > 0 ? stream.Length - (stream.Length - skipPosition) - stream.Position : stream.Length - stream.Position];
                     stream.Read(buffer,0, buffer.Length);
-                    return Encoding.UTF8.GetString(buffer).TrimStart();
+                    return Encoding.UTF8.GetString(buffer).Trim();
                 }
             }
         }

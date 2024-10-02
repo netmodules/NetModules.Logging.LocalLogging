@@ -22,65 +22,65 @@ namespace Modules.Logging.LocalLogging.TestApplication
 
             if (myModule.Count > 0)
             {
-                myModule[0].Log(LoggingEvent.Severity.Debug, "Hello debug!");
-                myModule[0].Log(LoggingEvent.Severity.Warning, "Hello warning!");
-                myModule[0].Log(LoggingEvent.Severity.Error, "Hello error!");
-                myModule[0].Log(LoggingEvent.Severity.Information, "Hello information!");
-                myModule[0].Log(LoggingEvent.Severity.Debug, "Hello debug!");
-                myModule[0].Log(LoggingEvent.Severity.Warning, "Hello warning!");
-                myModule[0].Log(LoggingEvent.Severity.Error, "Hello error!");
-                myModule[0].Log(LoggingEvent.Severity.Information, "Hello information!");
-                myModule[0].Log(LoggingEvent.Severity.Debug, "Hello debug!");
-                myModule[0].Log(LoggingEvent.Severity.Warning, "Hello warning!");
-                myModule[0].Log(LoggingEvent.Severity.Error, "Hello error!");
-                myModule[0].Log(LoggingEvent.Severity.Information, "Hello information!");
-                myModule[0].Log(LoggingEvent.Severity.Debug, "Hello debug!");
-                myModule[0].Log(LoggingEvent.Severity.Warning, "Hello warning!");
-                myModule[0].Log(LoggingEvent.Severity.Error, "Hello error!");
-                myModule[0].Log(LoggingEvent.Severity.Information, "Hello information!");
+                //myModule[0].Log(LoggingEvent.Severity.Debug, "Hello debug!");
+                //myModule[0].Log(LoggingEvent.Severity.Warning, "Hello warning!");
+                //myModule[0].Log(LoggingEvent.Severity.Error, "Hello error!");
+                //myModule[0].Log(LoggingEvent.Severity.Information, "Hello information!");
+                //myModule[0].Log(LoggingEvent.Severity.Debug, "Hello debug!");
+                //myModule[0].Log(LoggingEvent.Severity.Warning, "Hello warning!");
+                //myModule[0].Log(LoggingEvent.Severity.Error, "Hello error!");
+                //myModule[0].Log(LoggingEvent.Severity.Information, "Hello information!");
+                //myModule[0].Log(LoggingEvent.Severity.Debug, "Hello debug!");
+                //myModule[0].Log(LoggingEvent.Severity.Warning, "Hello warning!");
+                //myModule[0].Log(LoggingEvent.Severity.Error, "Hello error!");
+                //myModule[0].Log(LoggingEvent.Severity.Information, "Hello information!");
+                //myModule[0].Log(LoggingEvent.Severity.Debug, "Hello debug!");
+                //myModule[0].Log(LoggingEvent.Severity.Warning, "Hello warning!");
+                //myModule[0].Log(LoggingEvent.Severity.Error, "Hello error!");
+                //myModule[0].Log(LoggingEvent.Severity.Information, "Hello information!");
 
-                while (true)
-                {
-                    myModule[0].Log(LoggingEvent.Severity.Error, new Exception("This is an error!"), "Hello world!");
-                    Thread.Sleep(1000);
+                //while (true)
+                //{
+                //    myModule[0].Log(LoggingEvent.Severity.Error, new Exception("This is an error!"), "Hello world!");
+                //    Thread.Sleep(1000);
 
-                    var read = new ReadLoggingFileEvent
-                    {
-                        Input = new ReadLoggingFileEventInput
-                        {
-                            Lines = 10,
-                        }
-                    };
+                //    var read = new ReadLoggingFileEvent
+                //    {
+                //        Input = new ReadLoggingFileEventInput
+                //        {
+                //            Lines = 10,
+                //        }
+                //    };
 
-                    host.Handle(read);
+                //    host.Handle(read);
 
-                    var read2 = new ReadLoggingFileEvent
-                    {
-                        Input = new ReadLoggingFileEventInput
-                        {
-                            Lines = 10,
-                            SkipLines = 9,
-                        }
-                    };
+                //    var read2 = new ReadLoggingFileEvent
+                //    {
+                //        Input = new ReadLoggingFileEventInput
+                //        {
+                //            Lines = 10,
+                //            SkipLines = 9,
+                //        }
+                //    };
 
-                    host.Handle(read2);
-
-
-                    var search = new SearchLoggingFileEvent
-                    {
-                        Input = new SearchLoggingFileEventInput
-                        {
-                            Query = "this",
-                            MaxLines = 2,
-                        }
-                    };
-
-                    host.Handle(search);
+                //    host.Handle(read2);
 
 
-                    var last = new LastLineEvent();
-                    host.Handle(last);
-                }
+                //    var search = new SearchLoggingFileEvent
+                //    {
+                //        Input = new SearchLoggingFileEventInput
+                //        {
+                //            Query = "this",
+                //            MaxLines = 2,
+                //        }
+                //    };
+
+                //    host.Handle(search);
+
+
+                //    var last = new LastLineEvent();
+                //    host.Handle(last);
+                //}
             }
 
             BlockingHandle.WaitOne();

@@ -2,7 +2,7 @@
   /*
     This is the maximum file size (in megabytes) that the current log file can grow to before rotating.
   */
-  "logFileSize": 1,
+  "logFileSize": 10,
 
   /*
     Enables you to set the maximum number of rotation files to store before deleting a rotation file.
@@ -12,7 +12,7 @@
   /*
     You can set the logging level for logs that are written to file using this setting. This setting
     can be overridden using application the start argument "-loglevel", "-log", or "-l" followed by
-    the provided logging level option. The default setting is "information".
+    the provided logging level option. The default setting is "debug".
 
     Available options:
 
@@ -23,7 +23,6 @@
 
     Where each option includes logging for the options that proceed it. I.e. "debug" option will
     include all logs written to the log file, while "error" will only include error-level logging.
-    This setting can also be overridden at runtime by raising a SetLoggingLevelEvent.
   */
-  "logLevel": "information"
+  "logLevel": "debug"
 }
