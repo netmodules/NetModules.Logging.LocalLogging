@@ -48,6 +48,12 @@ namespace Modules.Logging.LocalLogging.Classes
                 Directory.CreateDirectory(logDir);
             }
 
+            // These fields are set before invoking Rotate method as they are used to calculate whether
+            // rotation is needed and how many rotations to keep...
+            // Kilobytes * megabytes * logfileSize.
+            LogFileSize = 1024 * 1024 * logFileSize;
+            LogFileCount = logRotationFileCount;
+
             Rotate(LogFilePath);
 
             lock (Queue)
@@ -60,10 +66,6 @@ namespace Modules.Logging.LocalLogging.Classes
                     sw.WriteLine();
                 }
             }
-
-            // Kilobytes * megabytes * logfileSize.
-            LogFileSize = 1024 * 1024 * logFileSize;
-            LogFileCount = logRotationFileCount;
 
             // Create and start the log file writing thread.
             LoggingThread = new Timer((state) =>
