@@ -1,0 +1,51 @@
+﻿<div id="download-logs" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Download Log Files</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="download-logs-container"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<fieldset class="toggleForm basic-search">
+    <form id="form-fetch-logs">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Find</span>
+            </div>
+            <input type="text" id="log-find" name="log-find" class="form-control w-25" placeholder="Search log file..." />
+            <div class="input-group-prepend">
+                <span class="input-group-text">Messages</span>
+            </div>
+            <input type="number" id="num-lines" name="num-lines" class="form-control lines" min="1" max="10000" step="1" value="100" placeholder="100" />
+            <div class="input-group-prepend">
+                <span class="input-group-text">Skip</span>
+            </div>
+            <input type="number" id="skip-lines" name="skip-lines" class="form-control" min="0" step="1" value="0" placeholder="0" />
+            <div class="input-group-append">
+                <button id="fetch-btn" class="btn btn-primary" type="submit">Fetch Logs</button>
+            </div>
+        </div>
+    </form>
+</fieldset>
+<div class="card w-100">
+    <div class="card-header">
+        <div class="d-flex">
+            <span class="my-auto">
+                Download Logs
+            </span>
+            <div class="ml-auto">
+                <button id="download" type="button" class="btn btn-light btn-sm">Download Logs</button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <textarea id="editor" name="editor" disabled></textarea>
+    </div>
+</div>

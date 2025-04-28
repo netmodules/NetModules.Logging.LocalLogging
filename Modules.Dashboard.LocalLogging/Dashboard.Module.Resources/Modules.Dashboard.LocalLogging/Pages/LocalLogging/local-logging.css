@@ -1,0 +1,67 @@
+﻿.card-body {
+    height: calc(100vh - 17.6rem);
+    padding: 1px !important;
+}
+
+.input-group > * {
+    margin-top: -1px;
+}
+
+.input-group .input-group-prepend:not(:first-child) {
+    margin-left: -1px;
+}
+
+.input-group input {
+    min-width: 60px;
+}
+
+.input-group .lines {
+    min-width: 80px;
+}
+
+/* Set the height of the editor */
+#editor {
+    height: 100%;
+    width: 100%;
+}
+
+#refresh-btn {
+    margin-right: 5px;
+}
+
+/* CodeMirror search */
+.CodeMirror-dialog.CodeMirror-dialog-top {
+    background: rgba(240, 240, 240, 0.9);
+    border: 1px solid #ccc;
+}
+
+.CodeMirror-search-label {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+    padding: 6px;
+}
+
+.CodeMirror-search-field {
+    width: 11em !important;
+    background: #fff !important;
+    color: #000 !important;
+    border: 1px solid #aaa !important;
+    border-radius: 5px;
+    padding: 0 6px;
+}
+
+.CodeMirror-vscrollbar {
+    pointer-events: auto !important;
+}
+
+.CodeMirror-search-match {
+    width: 17px !important;
+    height: 6px !important;
+}
+
+.CodeMirror-line:has(span span) {
+    border-top: 1px solid rgba(128, 128, 128, 0.2) !important;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.2) !important;
+    background-color: rgba(128, 128, 128, 0.05) !important;
+}

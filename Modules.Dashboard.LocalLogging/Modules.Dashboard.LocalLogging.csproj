@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<Authors>John Earnshaw</Authors>
+		<Copyright>John Earnshaw</Copyright>
+		<Description>
+			This Dashboard Module displays the log data from Modules.Logging.LocalLogging
+		</Description>
+		<Version>1.3.3</Version>
+	</PropertyGroup>
+	
+	<ItemGroup>
+		<PackageReference Include="NetModules" Version="1.3.3" />
+		<PackageReference Include="NetTools.Serialization.Json" Version="1.1.34" />
+		<PackageReference Include="NetTools.Serialization.JsonSchema" Version="1.1.15" />
+		<PackageReference Include="Modules.WebServer" Version="1.3.3.3" />
+		<PackageReference Include="Modules.UserManagement.Events" Version="1.3.1.11" />
+		<PackageReference Include="Modules.Dashboard.User.Events" Version="1.3.1.3" />
+		<PackageReference Include="Modules.Logging.LocalLogging.Events" Version="1.3.3" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Update="Dashboard.Module.Resources\Modules.Dashboard.LocalLogging\**">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		<Pack>true</Pack>
+		<PackageCopyToOutput>true</PackageCopyToOutput>
+	  </None>
+	</ItemGroup>
+
+</Project>
