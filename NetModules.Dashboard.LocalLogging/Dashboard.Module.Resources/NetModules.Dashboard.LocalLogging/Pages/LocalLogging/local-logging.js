@@ -69,7 +69,7 @@ const form = document.getElementById('my-form');
 const fetchBtn = document.getElementById("fetch-btn");
 
 const fetchLogs = (formData) => {
-    const loggingAjaxCallback = getDashboardUrl('Modules.Dashboard.LocalLogging.DashboardLoggingModule/callback/local-logging-callback');
+    const loggingAjaxCallback = getDashboardUrl('NetModules.Dashboard.LocalLogging.DashboardLoggingModule/callback/local-logging-callback');
 
     toggleForm();
 

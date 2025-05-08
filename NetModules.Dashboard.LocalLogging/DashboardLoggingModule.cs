@@ -1,20 +1,20 @@
-﻿using Modules.Logging.LocalLogging.Events;
-using Modules.WebServer.DashboardModule;
-using Modules.WebServer.DashboardModule.Classes;
-using Modules.WebServer.DashboardModule.Classes.Plugins;
-using Modules.WebServer.DashboardModule.Interfaces;
-using Modules.UserManagement;
-using Modules.Dashboard.User;
-using Modules.UserManagement.Events;
-using Modules.Dashboard.LocalLogging.Classes;
+﻿using NetModules.Logging.LocalLogging.Events;
+using NetModules.WebServer.DashboardModule;
+using NetModules.WebServer.DashboardModule.Classes;
+using NetModules.WebServer.DashboardModule.Classes.Plugins;
+using NetModules.WebServer.DashboardModule.Interfaces;
+using NetModules.UserManagement;
+using NetModules.Dashboard.User;
+using NetModules.UserManagement.Events;
+using NetModules.Dashboard.LocalLogging.Classes;
 using NetModules;
 using NetModules.Events;
 using NetModules.Interfaces;
 using NetTools.Web;
 using NetTools.Serialization;
-//using static Modules.WebServer.DashboardModule.DashboardModule;
+//using static NetModules.WebServer.DashboardModule.DashboardModule;
 
-namespace Modules.Dashboard.LocalLogging 
+namespace NetModules.Dashboard.LocalLogging 
 {
     [Module] 
     public class DashboardLoggingModule : DashboardModule 

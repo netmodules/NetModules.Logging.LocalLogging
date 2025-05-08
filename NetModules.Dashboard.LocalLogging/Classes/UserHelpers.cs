@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using NetModules;
 using NetModules.Interfaces;
-using Modules.UserManagement.Events;
+using NetModules.UserManagement.Events;
 
-namespace Modules.Dashboard.LocalLogging.Classes
+namespace NetModules.Dashboard.LocalLogging.Classes
 {
     internal static class UserHelpers
     {
@@ -45,7 +45,7 @@ namespace Modules.Dashboard.LocalLogging.Classes
 
         internal static bool HasAccess(IModule module, UserManagement.Events.Classes.User user, string session, string authorization, string userMetaKey = null)
         {
-            // This method is used in various method within the Modules.FrontendStarter module to check that a
+            // This method is used in various method within the NetModules.FrontendStarter module to check that a
             // valid user is available. If the user is null while debugging, you may still wish to make your
             // content available so you can test its functionality. The following condition enables this:
             if (user == null)
@@ -59,7 +59,7 @@ namespace Modules.Dashboard.LocalLogging.Classes
             }
 
             // If the current user is a super admin we return true indefinitely, this allows super admins to
-            // access all content in the Modules.WebServer Web App. This may be disabled if required by
+            // access all content in the NetModules.WebServer Web App. This may be disabled if required by
             // removing the following condition:
             if (user.UserLevel == UserManagement.Events.Enums.UserLevel.SuperAdmin)
             {

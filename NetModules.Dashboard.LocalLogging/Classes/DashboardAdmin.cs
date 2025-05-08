@@ -1,4 +1,4 @@
-﻿using Modules.Dashboard.User.Events;
+﻿using NetModules.Dashboard.User.Events;
 using NetModules.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Modules.Dashboard.LocalLogging.Classes
+namespace NetModules.Dashboard.LocalLogging.Classes
 {
     internal class DashboardAdmin
     {
