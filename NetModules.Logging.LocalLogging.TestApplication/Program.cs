@@ -22,22 +22,15 @@ namespace Modules.Logging.LocalLogging.TestApplication
 
             if (myModule.Count > 0)
             {
-                //myModule[0].Log(LoggingEvent.Severity.Debug, "Hello debug!");
-                //myModule[0].Log(LoggingEvent.Severity.Warning, "Hello warning!");
-                //myModule[0].Log(LoggingEvent.Severity.Error, "Hello error!");
-                //myModule[0].Log(LoggingEvent.Severity.Information, "Hello information!");
-                //myModule[0].Log(LoggingEvent.Severity.Debug, "Hello debug!");
-                //myModule[0].Log(LoggingEvent.Severity.Warning, "Hello warning!");
-                //myModule[0].Log(LoggingEvent.Severity.Error, "Hello error!");
-                //myModule[0].Log(LoggingEvent.Severity.Information, "Hello information!");
-                //myModule[0].Log(LoggingEvent.Severity.Debug, "Hello debug!");
-                //myModule[0].Log(LoggingEvent.Severity.Warning, "Hello warning!");
-                //myModule[0].Log(LoggingEvent.Severity.Error, "Hello error!");
-                //myModule[0].Log(LoggingEvent.Severity.Information, "Hello information!");
-                //myModule[0].Log(LoggingEvent.Severity.Debug, "Hello debug!");
-                //myModule[0].Log(LoggingEvent.Severity.Warning, "Hello warning!");
-                //myModule[0].Log(LoggingEvent.Severity.Error, "Hello error!");
-                //myModule[0].Log(LoggingEvent.Severity.Information, "Hello information!");
+                myModule[0].Log(LoggingEvent.Severity.Trace, "Hello trace!");
+                myModule[0].Log(LoggingEvent.Severity.Debug, "Hello debug!");
+                myModule[0].Log(LoggingEvent.Severity.Information, "Hello information!");
+                myModule[0].Log(LoggingEvent.Severity.Notice, "Hello notice!");
+                myModule[0].Log(LoggingEvent.Severity.Warning, "Hello warning!");
+                myModule[0].Log(LoggingEvent.Severity.Error, "Hello error!");
+                myModule[0].Log(LoggingEvent.Severity.Critical, "Hello critical!");
+                myModule[0].Log(LoggingEvent.Severity.Alert, "Hello alert!");
+                myModule[0].Log(LoggingEvent.Severity.Emergency, "Hello emergency!");
 
                 //while (true)
                 //{

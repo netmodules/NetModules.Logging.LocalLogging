@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,34 +12,36 @@ using NetTools.Logging;
 
 namespace Modules.Logging.LocalLogging.Classes
 {
-    internal class FileLogger : BaseLogger
+    internal class FileLogger : ILogger<LoggingEvent.Severity>
     {
+        Module Module;
+        Timer LoggingThread;
+        LoggingEvent.Severity MaxLoggingLevel;
+        Queue<string> Queue;
+
         /// <summary>
-        /// The delay in milliseconds between file writes. Log messages are queued and written in bursts
-        /// to reduce system overhead.
+        /// A delay in milliseconds between file write and rotate. Log messages are queued and written
+        /// in bursts to reduce system overhead.
         /// </summary>
         const ushort LogFileWriteDelay = 5000; // 5 seconds
 
-        LoggingEvent.Severity MaxLoggingLevel;
         string LogFilePath;
         int LogFileSize;
-        ushort LogFileCount;
-        Timer LoggingThread;
-        Module Module;
-        Queue<string> Queue;
-        string LastLine;
+        int LogFileCount;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="module">The module.</param>
-        /// <param name="logFileSize">The size of a log file in megabytes before rotating the log file.</param>
-        /// <param name="logRotationFileCount">The number of log rotation files to keep.</param>
-        public FileLogger(Module module, ushort logFileSize, ushort logRotationFileCount, LoggingEvent.Severity maxLoggingLevel)
+        /// <param name="maxLoggingLevel">The number of log rotation files to keep.</param>
+        internal FileLogger(Module module, LoggingEvent.Severity maxLoggingLevel)
         {
             Module = module;
             Queue = new Queue<string>();
-            LogFilePath = Path.Combine(module.WorkingDirectory.LocalPath, "logs", "error.log");
+
+            var relative = Module.GetSetting("logFileDirectory", "..");
+            LogFilePath = Path.GetFullPath(Path.Combine(Module.WorkingDirectory.LocalPath, relative, "logs", "error.log"));
+
             SetMaxLoggingLevel(maxLoggingLevel);
 
             var logDir = Path.GetDirectoryName(LogFilePath);
@@ -50,9 +53,9 @@ namespace Modules.Logging.LocalLogging.Classes
 
             // These fields are set before invoking Rotate method as they are used to calculate whether
             // rotation is needed and how many rotations to keep...
-            // Kilobytes * megabytes * logfileSize.
-            LogFileSize = 1024 * 1024 * logFileSize;
-            LogFileCount = logRotationFileCount;
+            // kilobytes * megabytes * logfileSize.
+            LogFileSize = 1024 * 1024 * Module.GetSetting("logFileSize", 1);
+            LogFileCount = Module.GetSetting("logFileRotationCount", 1);
 
             Rotate(LogFilePath);
 
@@ -75,16 +78,10 @@ namespace Modules.Logging.LocalLogging.Classes
             }, null, 0, LogFileWriteDelay);
         }
 
-        // Destructor...
+        // Destructor... Attempt to flush the log file before the module is unloaded!
         ~FileLogger()
         {
             Write(LogFilePath);
-            //Rotate(LogFilePath);
-        }
-
-        internal string GetLastLine()
-        {
-            return LastLine;
         }
 
         internal void SetMaxLoggingLevel(LoggingEvent.Severity maxLoggingLevel)
@@ -92,55 +89,23 @@ namespace Modules.Logging.LocalLogging.Classes
             MaxLoggingLevel = maxLoggingLevel;
         }
 
+
         /// <summary>
         /// 
         /// </summary>
-        public override void Error(params object[] args)
+        public void Log(params object[] args)
         {
-            var line = $"{LoggingHelpers.GetDateString()}> ERROR: {LoggingHelpers.GetPrintableArgs(args)}";
-            LastLine = line;
-
-            Queue.Enqueue(line);
+            Queue.Enqueue(string.Join("\n>", args));
         }
 
-        public override void Analytic(params object[] args)
+
+        public void Log(LoggingEvent.Severity level, params object[] args)
         {
-            var line = $"{LoggingHelpers.GetDateString()}> INFORMATION: {LoggingHelpers.GetPrintableArgs(args)}";
-            LastLine = line;
-
-
-            if (MaxLoggingLevel == LoggingEvent.Severity.Information)
-            {
-                Queue.Enqueue(line);
-            }
+            Queue.Enqueue($"{LoggingHelpers.GetDateString()}:{level.ToString().ToUpperInvariant()} {string.Join("\n>", args)}");
         }
 
-        public override void Debug(params object[] args)
-        {
-            var line = $"{LoggingHelpers.GetDateString()}> DEBUG: {LoggingHelpers.GetPrintableArgs(args)}";
-            LastLine = line;
 
-            if (MaxLoggingLevel == LoggingEvent.Severity.Information
-                || MaxLoggingLevel == LoggingEvent.Severity.Debug)
-            {
-                Queue.Enqueue(line);
-            }
-        }
 
-        public override void Information(params object[] args)
-        {
-            var line = $"{LoggingHelpers.GetDateString()}> WARNING: {LoggingHelpers.GetPrintableArgs(args)}";
-            LastLine = line;
-
-            if (MaxLoggingLevel == LoggingEvent.Severity.Information
-                || MaxLoggingLevel == LoggingEvent.Severity.Debug
-                || MaxLoggingLevel == LoggingEvent.Severity.Warning)
-            {
-                Queue.Enqueue(line);
-            }
-        }
-
-        
         /// <summary>
         /// 
         /// </summary>
@@ -365,13 +330,14 @@ namespace Modules.Logging.LocalLogging.Classes
         /// </summary>
         private void Rotate(string path)
         {
-            if (!File.Exists(path))
+            if (LogFileCount < 1 || !File.Exists(path))
             {
                 return;
             }
 
             var fileInfo = new FileInfo(path);
-            if (fileInfo.Length < LogFileSize)
+            
+            if (LogFileSize < 1 || fileInfo.Length < LogFileSize)
             {
                 return;
             }

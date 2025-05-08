@@ -74,13 +74,18 @@ namespace Modules.Logging.LocalLogging
 
         public override void OnLoaded()
         {
-            var logFileSize = (ushort)GetSetting("logFileSize", 100);
-            var logRotationFileCount = (ushort)GetSetting("logRotationFileCount", 10);
-            var logLevel = GetSetting("logLevel", string.Empty);
-            var maxLogLevel = !string.IsNullOrEmpty(logLevel)
+            var logLevel = GetSetting("consoleLogLevel", string.Empty);
+            var fileLogLevel = !string.IsNullOrEmpty(logLevel)
                 && Enum.TryParse<LoggingEvent.Severity>(logLevel, true, out var ll)
                 ? ll
-                : LoggingEvent.Severity.Information;
+                : LoggingEvent.Severity.Error;
+
+            logLevel = GetSetting("fileLogLevel", string.Empty);
+            
+            var consoleLogLevel = !string.IsNullOrEmpty(logLevel)
+                && Enum.TryParse<LoggingEvent.Severity>(logLevel, true, out ll)
+                ? ll
+                : LoggingEvent.Severity.Error;
 
             if (Host.Arguments != null)
             {
@@ -94,18 +99,18 @@ namespace Modules.Logging.LocalLogging
                         switch (value.Trim('"'))
                         {
                             case "debug":
-                                maxLogLevel = LoggingEvent.Severity.Debug;
+                                fileLogLevel = LoggingEvent.Severity.Debug;
                                 break;
                             case "analytics":
                             case "information":
                             case "info":
-                                maxLogLevel = LoggingEvent.Severity.Information;
+                                fileLogLevel = LoggingEvent.Severity.Information;
                                 break;
                             case "warning":
-                                maxLogLevel = LoggingEvent.Severity.Warning;
+                                fileLogLevel = LoggingEvent.Severity.Warning;
                                 break;
                             default:
-                                maxLogLevel = LoggingEvent.Severity.Error;
+                                fileLogLevel = LoggingEvent.Severity.Error;
                                 break;
                         }
                         
@@ -114,7 +119,7 @@ namespace Modules.Logging.LocalLogging
                 }
             }
 
-            LoggingHandler = new LoggingHandler(this, logFileSize, logRotationFileCount, maxLogLevel);
+            LoggingHandler = new LoggingHandler(this, consoleLogLevel, fileLogLevel);
             base.OnLoaded();
         }
 

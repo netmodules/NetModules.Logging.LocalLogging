@@ -10,10 +10,10 @@ namespace Modules.Logging.LocalLogging.Events
 {
     /// <summary>
     /// This event is handled by the Modules.Logging.LocalLogging.LoggingModule and allows you to set the logging
-    /// level for the local logging file.
+    /// level for a selected logger at runtime.
     /// </summary>
     [JsonSchemaTitle("Set Logging Level Event")]
-    [JsonSchemaDescription("This event is handled by the Modules.Logging.LocalLogging.LoggingModule and allows you to set the logging level for the local logging file.")]
+    [JsonSchemaDescription("This event is handled by the Modules.Logging.LocalLogging.LoggingModule and allows you to set the level for a selected logger at runtime.")]
     public class SetLoggingLevelEvent : Event<SetLoggingLevelEventInput, EmptyEventOutput>
     {
         /// <inheritdoc/>

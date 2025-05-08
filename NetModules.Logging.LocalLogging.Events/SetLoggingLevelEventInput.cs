@@ -1,6 +1,7 @@
 ﻿using System;
 using NetModules.Events;
 using NetModules.Interfaces;
+using NetModules.Logging.LocalLogging.Events.Enums;
 using NetTools.Serialization.JsonSchemaAttributes;
 
 namespace Modules.Logging.LocalLogging.Events
@@ -13,11 +14,19 @@ namespace Modules.Logging.LocalLogging.Events
     public struct SetLoggingLevelEventInput : IEventInput
     {
         /// <summary>
-        /// Set the level of logging to record in the local logging file.
+        /// Select a logger to apply a new logging level for.
+        /// </summary>
+        [JsonSchemaTitle("Logger")]
+        [JsonSchemaDescription("Select a logger to apply a new logging level for.")]
+        public Logger Logger { get; set; }
+
+
+        /// <summary>
+        /// Set the level of logging to output for the selected logger(s).
         /// </summary>
         [JsonSchemaTitle("Severity")]
-        [JsonSchemaDefault(100)]
-        [JsonSchemaDescription("Set the level of logging to record in the local logging file.")]
+        [JsonSchemaDefault(LoggingEvent.Severity.Error)]
+        [JsonSchemaDescription("Set the level of logging to output for the selected logger(s).")]
         public LoggingEvent.Severity Severity { get; set; }
     }
 }

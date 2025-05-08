@@ -15,48 +15,38 @@ namespace Modules.Logging.LocalLogging.Classes
     internal class LoggingHandler
     {
         Module Module;
+        ConsoleLogger ConsoleLogger;
         FileLogger FileLogger;
+
+        string LastLine;
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="module"></param>
-        /// <param name="logFileSize">The size of a log file in megabytes before rotating the log file.</param>
-        /// <param name="logRotationFileCount">The number of log rotation files to keep.</param>
-        internal LoggingHandler(Module module, ushort logFileSize, ushort logRotationFileCount, LoggingEvent.Severity maxLoggingLevel)
+        internal LoggingHandler(Module module, LoggingEvent.Severity consoleLogLevel, LoggingEvent.Severity fileLogLevel)
         {
             Module = module;
-            Log.AutoDebug = false;
-            Log.AddLogger(new ConsoleLogger());
+            ConsoleLogger = new ConsoleLogger(consoleLogLevel);
+            Loggers.AddLogger(ConsoleLogger);
 
-            FileLogger = new FileLogger(Module, logFileSize, logRotationFileCount, maxLoggingLevel);
-            Log.AddLogger(FileLogger);
+            FileLogger = new FileLogger(Module, fileLogLevel);
+            Loggers.AddLogger(FileLogger);
         }
 
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="event"></param>
-        internal void LogEvent(LoggingEvent @event)
+        /// <param name="e"></param>
+        internal void LogEvent(LoggingEvent e)
         {
-            if (@event.Input.Arguments != null && @event.Input.Arguments.Count > 0)
+            if (e.Input.Arguments != null && e.Input.Arguments.Count > 0)
             {
-                switch (@event.Input.Severity)
-                {
-                    case LoggingEvent.Severity.Information:
-                        Log.Analytic(@event.Input.Arguments.ToArray());
-                        break;
-                    case LoggingEvent.Severity.Debug:
-                        Log.Debug(@event.Input.Arguments.ToArray());
-                        break;
-                    case LoggingEvent.Severity.Error:
-                        Log.Error(@event.Input.Arguments.ToArray());
-                        break;
-                    case LoggingEvent.Severity.Warning:
-                        Log.Information(@event.Input.Arguments.ToArray());
-                        break;
-                }
+                var printable = LoggingHelpers.GetPrintableArgs(e.Input.Arguments.ToArray());
+                
+                LastLine = $"{LoggingHelpers.GetDateString()}:{e.Input.Severity.ToString().ToUpperInvariant()} {string.Join("\n>", printable)}";
+
+                Loggers.Log<LoggingEvent.Severity>(e.Input.Severity, printable);
             }
         }
 
@@ -69,8 +59,9 @@ namespace Modules.Logging.LocalLogging.Classes
         {
             e.Output = new ReadLoggingFileEventOutput
             {
-                Log = FileLogger.GetLastLine()
+                Log = LastLine
             };
+
             e.Handled = true;
         }
 

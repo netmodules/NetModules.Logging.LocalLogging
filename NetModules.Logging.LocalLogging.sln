@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Modules.Dashboard.LocalLogging", "Modules.Dashboard.LocalLogging\Modules.Dashboard.LocalLogging.csproj", "{4E3635D9-775C-44F5-864C-4814B7C36892}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetModules.Dashboard.LocalLogging", "NetModules.Dashboard.LocalLogging\NetModules.Dashboard.LocalLogging.csproj", "{4E3635D9-775C-44F5-864C-4814B7C36892}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Modules.Logging.LocalLogging", "Modules.Logging.LocalLogging\Modules.Logging.LocalLogging.csproj", "{4DBDFFAC-CFAA-4D64-B860-73E4272C96D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetModules.Logging.LocalLogging", "NetModules.Logging.LocalLogging\NetModules.Logging.LocalLogging.csproj", "{4DBDFFAC-CFAA-4D64-B860-73E4272C96D4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Modules.Logging.LocalLogging.TestApplication", "Modules.Logging.LocalLogging.TestApplication\Modules.Logging.LocalLogging.TestApplication.csproj", "{0C91DBBB-A456-4724-BF48-F68CBB280F03}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetModules.Logging.LocalLogging.TestApplication", "NetModules.Logging.LocalLogging.TestApplication\NetModules.Logging.LocalLogging.TestApplication.csproj", "{0C91DBBB-A456-4724-BF48-F68CBB280F03}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Modules.Logging.LocalLogging.Events", "Modules.Logging.LocalLogging.Events\Modules.Logging.LocalLogging.Events.csproj", "{BA331B59-5865-4683-BF79-567F731D7E22}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetModules.Logging.LocalLogging.Events", "NetModules.Logging.LocalLogging.Events\NetModules.Logging.LocalLogging.Events.csproj", "{BA331B59-5865-4683-BF79-567F731D7E22}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

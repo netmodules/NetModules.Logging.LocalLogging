@@ -1,0 +1,88 @@
+﻿{
+
+  /*
+    NetModules.Logging.LocalLogging.settings.default.json
+    -----------------------------------------------------
+    This file contains example settings and default values that are used by
+    NetModules.Logging.LocalLogging module and provide an example of how to configure the logging
+    module for handling NetModules.Events.LoggingEvent events.
+  
+    This file is loaded by the NetModules.Settings.LocalSettings module. If local settings module
+    is not installed in your project, default settings are assigned that match these default values.
+    
+    To replace these settings at runtime you should create a file named:
+    
+    NetModules.Logging.LocalLogging.settings.json
+  
+    And change each setting accordingly...
+  
+    
+  
+    You can set the logging level for console logging and file logging using these values.
+
+    
+    Available options:
+      "trace"
+      "debug"
+      "information"
+      "warning"
+      "error"
+
+    
+    Each option includes logging for the options that proceed it. E.g. "trace" option will include
+    all logs, while "debug" will only include debug-level logging and above, and "error" will only
+    include logging for error severity and above.
+  */
+
+
+  /* CONSOLE LOGGING */
+
+  /*
+    You can enable or disable the console logger using this setting. The default setting is "true".
+    Disabling this option may be useful for runtime environment such as Unix, where console logging
+    is written to the system log (and the console if available).
+  */
+  "enableConsoleLogger": true,
+
+  /*
+    This setting can be overridden at runtime by raising a
+    NetModules.Logging.LocalLogging.SetLoggingLevelEvent event.
+  */
+  "consoleLogLevel": "trace",
+
+
+  /* FILE LOGGING */
+
+  /*
+    You can enable or disable the file logger using this setting. The default setting is "true".
+  */
+  "enableFileLogger": true,
+
+  /*
+    You can set the log file directory relative to the logging module's WorkingDirctory using this
+    option. The default setting is "..", this is the parent directory of the logging module.
+  */
+  "logFileDirectory": "..",
+
+  /*
+    This is the maximum file size (in megabytes) that the current log file can grow to before
+    rotating.
+  */
+  "logFileSize": 1,
+
+  /*
+    Enables you to set the maximum number of rotation files to store before deleting an old rotation
+    file.
+  */
+  "logFileRotationCount": 2,
+
+  /*
+    You can set the logging level for logs that are written to file using this setting. This setting
+    can be overridden using application the start argument "-loglevel", "-log", or "-l" followed by
+    the provided logging level option. The default setting is "error".
+
+    This setting can also be overridden at runtime by raising a
+    NetModules.Logging.LocalLogging.SetLoggingLevelEvent event.
+  */
+  "fileLogLevel": "error"
+}
