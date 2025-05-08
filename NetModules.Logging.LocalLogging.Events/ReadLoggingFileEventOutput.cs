@@ -1,10 +1,8 @@
-﻿using System;
-using System.ComponentModel.Design;
-using NetModules.Interfaces;
-using NetTools.Serialization.JsonSchemaAttributes;
+﻿using NetTools.Serialization.JsonSchemaAttributes;
 using NetTools.Serialization.JsonSchemaEnums;
+using NetModules.Interfaces;
 
-namespace Modules.Logging.LocalLogging.Events
+namespace NetModules.Logging.LocalLogging.Events
 {
     /// <summary>
     /// This is the event output object type that is returned by a Read Logging File Event.
@@ -13,6 +11,9 @@ namespace Modules.Logging.LocalLogging.Events
     [JsonSchemaDescription("This is the event output object type that is returned by a Read Logging File Event.")]
     public class ReadLoggingFileEventOutput : IEventOutput
     {
+        /// <summary>
+        /// Contains the log text from the local logging file for the number of lines requested.
+        /// </summary>
         [JsonSchemaTitle("Log")]
         [JsonSchemaFormat(StringFormat.Multiline)]
         [JsonSchemaDescription("Contains the log text from the local logging file for the number of lines requested.")]

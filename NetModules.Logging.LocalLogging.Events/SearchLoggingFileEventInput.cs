@@ -1,8 +1,7 @@
-﻿using System;
+﻿using NetTools.Serialization.JsonSchemaAttributes;
 using NetModules.Interfaces;
-using NetTools.Serialization.JsonSchemaAttributes;
 
-namespace Modules.Logging.LocalLogging.Events
+namespace NetModules.Logging.LocalLogging.Events
 {
     /// <summary>
     /// This is the event input object type for a Search Logging File Event.

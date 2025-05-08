@@ -11,15 +11,15 @@
     <PackageReference Include="NetModules" Version="1.3.8" />
     <!--<PackageReference Include="NetModules.Settings.LocalSettings" Version="1.3.0" />
 	
-	<PackageReference Include="Modules.Convert.Json" Version="1.2.8" />
-	<PackageReference Include="Modules.Convert.Json.Events" Version="1.2.8" />
-	<PackageReference Include="Modules.Convert.Xml" Version="1.2.8" />
-	<PackageReference Include="Modules.Convert.Xml.Events" Version="1.2.8" />
+	<PackageReference Include="NetModules.Convert.Json" Version="1.2.8" />
+	<PackageReference Include="NetModules.Convert.Json.Events" Version="1.2.8" />
+	<PackageReference Include="NetModules.Convert.Xml" Version="1.2.8" />
+	<PackageReference Include="NetModules.Convert.Xml.Events" Version="1.2.8" />
 
-	<PackageReference Include="Modules.Events.JsonSchema" Version="1.3.1" />
-	<PackageReference Include="Modules.Dashboard.EventPlayground" Version="1.3.1.3" />
+	<PackageReference Include="NetModules.Events.JsonSchema" Version="1.3.1" />
+	<PackageReference Include="NetModules.Dashboard.EventPlayground" Version="1.3.1.3" />
 
-	<PackageReference Include="Modules.WebServer" Version="1.3.3" />-->
+	<PackageReference Include="NetModules.WebServer" Version="1.3.3" />-->
   </ItemGroup>
 
   <ItemGroup>

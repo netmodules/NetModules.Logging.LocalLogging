@@ -1,9 +1,8 @@
-﻿using System;
-using Modules.Logging.LocalLogging.Events.Enums;
+﻿using NetTools.Serialization.JsonSchemaAttributes;
 using NetModules.Interfaces;
-using NetTools.Serialization.JsonSchemaAttributes;
+using NetModules.Logging.LocalLogging.Events.Enums;
 
-namespace Modules.Logging.LocalLogging.Events
+namespace NetModules.Logging.LocalLogging.Events
 {
     /// <summary>
     /// This is the event input object type for a Read Logging File Event.

@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
-using NetModules;
-using NetTools.Serialization.JsonSchemaAttributes;
-using NetTools.Serialization.JsonSchemaEnums;
+﻿using NetTools.Serialization.JsonSchemaAttributes;
 
-namespace Modules.Logging.LocalLogging.Events
+namespace NetModules.Logging.LocalLogging.Events
 {
     /// <summary>
     /// This event is handled by the Modules.Logging.LocalLogging.LoggingModule and allows you to read lines

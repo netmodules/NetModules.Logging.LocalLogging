@@ -1,14 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Modules.Logging.LocalLogging.Events.Enums
+﻿namespace NetModules.Logging.LocalLogging.Events.Enums
 {
+    /// <summary>
+    /// Enumeration of available read modes for the logging file.
+    /// </summary>
     public enum ReadMode
     {
+        /// <summary>
+        /// Read from the end of the file.
+        /// </summary>
         Tail,
+        /// <summary>
+        /// Read from the start of the file.
+        /// </summary>
         Head
     }
 }

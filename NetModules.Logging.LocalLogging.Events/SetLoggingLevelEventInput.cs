@@ -1,10 +1,9 @@
-﻿using System;
+﻿using NetTools.Serialization.JsonSchemaAttributes;
 using NetModules.Events;
 using NetModules.Interfaces;
 using NetModules.Logging.LocalLogging.Events.Enums;
-using NetTools.Serialization.JsonSchemaAttributes;
 
-namespace Modules.Logging.LocalLogging.Events
+namespace NetModules.Logging.LocalLogging.Events
 {
     /// <summary>
     /// This is the event input object type for a Set Logging Level Event.

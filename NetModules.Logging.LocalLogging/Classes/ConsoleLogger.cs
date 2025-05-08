@@ -1,46 +1,44 @@
 ﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Linq;
-using NetModules;
 using NetTools.Logging;
-using NetModules.Interfaces;
-using NetTools.Serialization;
 using NetModules.Events;
-using System.Collections;
+using NetModules.Interfaces;
 
-namespace Modules.Logging.LocalLogging.Classes
+namespace NetModules.Logging.LocalLogging.Classes
 {
     internal class ConsoleLogger : ILogger<LoggingEvent.Severity>
     {
+        bool Enabled;
         bool HasConsole;
-        LoggingEvent.Severity MaxLoggingLevel;
+        LoggingEvent.Severity LoggingLevel;
 
-        internal ConsoleLogger(LoggingEvent.Severity maxLoggingLevel)
+        internal ConsoleLogger(IModule module, LoggingEvent.Severity logLevel)
         {
+            Enabled = module.GetSetting("enableConsoleLogger", true);
             HasConsole = HasConsoleWindow();
-            SetMaxLoggingLevel(maxLoggingLevel);
+            SetLoggingLevel(logLevel);
         }
 
 
         public void Log(params object[] args)
         {
-            if (!HasConsole)
+            if (!Enabled || !HasConsole)
             {
                 return;
             }
 
+            SetConsoleColor(LoggingHelpers.GetLoggingColor(LoggingEvent.Severity.Trace));
             LogString(string.Join("\n>", args));
         }
 
         public void Log(LoggingEvent.Severity level, params object[] args)
         {
-            if (!HasConsole || level > MaxLoggingLevel)
+            if (!Enabled || !HasConsole || level < LoggingLevel)
             {
                 return;
             }
 
-            LogString($"{LoggingHelpers.GetDateString()}:{level.ToString().ToUpperInvariant()} {string.Join("\n>", args)}");
+            SetConsoleColor(LoggingHelpers.GetLoggingColor(level));
+            LogString($"{LoggingHelpers.GetDateString(true)}:{level.ToString().ToUpperInvariant()} {string.Join("\n>", args)}");
         }
 
 
@@ -55,9 +53,9 @@ namespace Modules.Logging.LocalLogging.Classes
         }
 
 
-        internal void SetMaxLoggingLevel(LoggingEvent.Severity maxLoggingLevel)
+        internal void SetLoggingLevel(LoggingEvent.Severity logLevel)
         {
-            MaxLoggingLevel = maxLoggingLevel;
+            LoggingLevel = logLevel;
         }
 
         internal void SetConsoleColor(ConsoleColor color)

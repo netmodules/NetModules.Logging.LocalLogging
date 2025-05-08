@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Threading;
-using NetModules;
 using NetModules.Events;
-using Modules.Logging.LocalLogging.Events;
+using NetModules.Logging.LocalLogging.Events;
 
-namespace Modules.Logging.LocalLogging.TestApplication
+namespace NetModules.Logging.LocalLogging.TestApplication
 {
     class Program
     {
@@ -17,6 +16,25 @@ namespace Modules.Logging.LocalLogging.TestApplication
             host.Arguments.Add("error");
 
             host.Modules.LoadModules();
+
+            host.Handle(new SetLoggingLevelEvent()
+            {
+                Input = new SetLoggingLevelEventInput()
+                {
+                    Logger = Events.Enums.Logger.All,
+                    Severity = LoggingEvent.Severity.Trace
+                }
+            });
+
+            host.Log(LoggingEvent.Severity.Trace, "Hello trace!");
+            host.Log(LoggingEvent.Severity.Debug, "Hello debug!");
+            host.Log(LoggingEvent.Severity.Information, "Hello information!");
+            host.Log(LoggingEvent.Severity.Notice, "Hello notice!");
+            host.Log(LoggingEvent.Severity.Warning, "Hello warning!");
+            host.Log(LoggingEvent.Severity.Error, "Hello error!");
+            host.Log(LoggingEvent.Severity.Critical, "Hello critical!");
+            host.Log(LoggingEvent.Severity.Alert, "Hello alert!");
+            host.Log(LoggingEvent.Severity.Emergency, "Hello emergency!");
 
             var myModule = host.Modules.GetModulesByType<LoggingModule>();
 
@@ -31,50 +49,35 @@ namespace Modules.Logging.LocalLogging.TestApplication
                 myModule[0].Log(LoggingEvent.Severity.Critical, "Hello critical!");
                 myModule[0].Log(LoggingEvent.Severity.Alert, "Hello alert!");
                 myModule[0].Log(LoggingEvent.Severity.Emergency, "Hello emergency!");
-
-                //while (true)
-                //{
-                //    myModule[0].Log(LoggingEvent.Severity.Error, new Exception("This is an error!"), "Hello world!");
-                //    Thread.Sleep(1000);
-
-                //    var read = new ReadLoggingFileEvent
-                //    {
-                //        Input = new ReadLoggingFileEventInput
-                //        {
-                //            Lines = 10,
-                //        }
-                //    };
-
-                //    host.Handle(read);
-
-                //    var read2 = new ReadLoggingFileEvent
-                //    {
-                //        Input = new ReadLoggingFileEventInput
-                //        {
-                //            Lines = 10,
-                //            SkipLines = 9,
-                //        }
-                //    };
-
-                //    host.Handle(read2);
-
-
-                //    var search = new SearchLoggingFileEvent
-                //    {
-                //        Input = new SearchLoggingFileEventInput
-                //        {
-                //            Query = "this",
-                //            MaxLines = 2,
-                //        }
-                //    };
-
-                //    host.Handle(search);
-
-
-                //    var last = new LastLineEvent();
-                //    host.Handle(last);
-                //}
             }
+
+            var lastLine = new LastLineEvent();
+            host.Handle(lastLine);
+            Console.WriteLine($"Last line: {lastLine.Output.Log}");
+
+            var readLog = new ReadLoggingFileEvent()
+            {
+                Input = new ReadLoggingFileEventInput()
+                {
+                    Lines = 1,
+                    ReadMode = Events.Enums.ReadMode.Tail
+                }
+            };
+
+            host.Handle(readLog);
+            Console.WriteLine($"Read log: {readLog.Output.Log}");
+
+            var searchLog = new SearchLoggingFileEvent()
+            {
+                Input = new SearchLoggingFileEventInput()
+                {
+                    MaxLines = 1,
+                    Query = "debug"
+                }
+            };
+            
+            host.Handle(searchLog);
+            Console.WriteLine($"Search log: {searchLog.Output.Log}");
 
             BlockingHandle.WaitOne();
         }

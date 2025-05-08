@@ -48,7 +48,7 @@
     This setting can be overridden at runtime by raising a
     NetModules.Logging.LocalLogging.SetLoggingLevelEvent event.
   */
-  "consoleLogLevel": "trace",
+  "consoleLogLevel": "debug",
 
 
   /* FILE LOGGING */

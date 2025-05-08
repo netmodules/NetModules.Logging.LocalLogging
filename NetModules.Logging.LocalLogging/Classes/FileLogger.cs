@@ -1,22 +1,21 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using Modules.Logging.LocalLogging.Events.Enums;
-using NetModules;
-using NetModules.Events;
+using System.Collections;
+using System.Collections.Generic;
 using NetTools.Logging;
+using NetModules.Events;
+using NetModules.Logging.LocalLogging.Events.Enums;
 
-namespace Modules.Logging.LocalLogging.Classes
+namespace NetModules.Logging.LocalLogging.Classes
 {
     internal class FileLogger : ILogger<LoggingEvent.Severity>
     {
         Module Module;
         Timer LoggingThread;
-        LoggingEvent.Severity MaxLoggingLevel;
+        LoggingEvent.Severity LoggingLevel;
         Queue<string> Queue;
 
         /// <summary>
@@ -28,21 +27,28 @@ namespace Modules.Logging.LocalLogging.Classes
         string LogFilePath;
         int LogFileSize;
         int LogFileCount;
+        bool Enabled;
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="module">The module.</param>
-        /// <param name="maxLoggingLevel">The number of log rotation files to keep.</param>
-        internal FileLogger(Module module, LoggingEvent.Severity maxLoggingLevel)
+        internal FileLogger(Module module, LoggingEvent.Severity logLevel)
         {
             Module = module;
-            Queue = new Queue<string>();
 
             var relative = Module.GetSetting("logFileDirectory", "..");
-            LogFilePath = Path.GetFullPath(Path.Combine(Module.WorkingDirectory.LocalPath, relative, "logs", "error.log"));
+            LogFilePath = Path.GetFullPath(Path.Combine(Module.WorkingDirectory.LocalPath, relative, "logs", "logs.log"));
 
-            SetMaxLoggingLevel(maxLoggingLevel);
+            Enabled = module.GetSetting("enableConsoleLogger", true);
+            
+            if (!Enabled)
+            {
+                return;
+            }
+            
+            Queue = new Queue<string>();
+
+            SetLoggingLevel(logLevel);
 
             var logDir = Path.GetDirectoryName(LogFilePath);
 
@@ -63,9 +69,9 @@ namespace Modules.Logging.LocalLogging.Classes
             {
                 using (StreamWriter sw = new StreamWriter(LogFilePath, true))
                 {
-                    sw.WriteLine($"{LoggingHelpers.GetDateString()}: {Module.ModuleAttributes.Name}");
+                    sw.WriteLine($"{LoggingHelpers.GetDateString(true)}: {Module.ModuleAttributes.Name}");
                     sw.WriteLine($">Initializing error log file for {Module.Host.ApplicationName}");
-                    sw.WriteLine($">Working directory: {Module.WorkingDirectory.LocalPath}");
+                    sw.WriteLine($">Log file: {LogFilePath}");
                     sw.WriteLine();
                 }
             }
@@ -81,12 +87,18 @@ namespace Modules.Logging.LocalLogging.Classes
         // Destructor... Attempt to flush the log file before the module is unloaded!
         ~FileLogger()
         {
+            if (!Enabled)
+            {
+                return;
+            }
+
             Write(LogFilePath);
+            LoggingThread.Dispose();
         }
 
-        internal void SetMaxLoggingLevel(LoggingEvent.Severity maxLoggingLevel)
+        internal void SetLoggingLevel(LoggingEvent.Severity logLevel)
         {
-            MaxLoggingLevel = maxLoggingLevel;
+            LoggingLevel = logLevel;
         }
 
 
@@ -95,13 +107,23 @@ namespace Modules.Logging.LocalLogging.Classes
         /// </summary>
         public void Log(params object[] args)
         {
+            if (!Enabled)
+            {
+                return;
+            }
+
             Queue.Enqueue(string.Join("\n>", args));
         }
 
 
         public void Log(LoggingEvent.Severity level, params object[] args)
         {
-            Queue.Enqueue($"{LoggingHelpers.GetDateString()}:{level.ToString().ToUpperInvariant()} {string.Join("\n>", args)}");
+            if (!Enabled || level < LoggingLevel)
+            {
+                return;
+            }
+
+            Queue.Enqueue($"{LoggingHelpers.GetDateString(true)}:{level.ToString().ToUpperInvariant()} {string.Join("\n>", args)}");
         }
 
 
@@ -142,6 +164,11 @@ namespace Modules.Logging.LocalLogging.Classes
 
         internal string Read(ushort lines, ulong skipLines = 0, ReadMode mode = ReadMode.Tail)
         {
+            if (!File.Exists(LogFilePath))
+            {
+                return string.Empty;
+            }
+
             if (mode == ReadMode.Tail)
             {
                 return ReadUp(lines, skipLines);
@@ -268,6 +295,11 @@ namespace Modules.Logging.LocalLogging.Classes
 
         internal string Search(string query, ushort maxLines = 0)
         {
+            if (!File.Exists(LogFilePath))
+            {
+                return string.Empty;
+            }
+
             if (maxLines == 0)
             {
                 maxLines = 1;

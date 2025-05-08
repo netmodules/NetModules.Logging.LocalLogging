@@ -1,5 +1,5 @@
 ﻿using NetModules;
-namespace Modules.Logging.LocalLogging.TestApplication
+namespace NetModules.Logging.LocalLogging.TestApplication
 {
     class BasicModuleHost : ModuleHost
     {

@@ -1,26 +1,30 @@
 ﻿using System;
-using NetModules;
-using NetModules.Events;
 using NetModules.Interfaces;
-using Modules.Logging.LocalLogging.Classes;
-using Modules.Logging.LocalLogging.Events;
+using NetModules.Events;
+using NetModules.Logging.LocalLogging.Classes;
+using NetModules.Logging.LocalLogging.Events;
+using static NetModules.Events.LoggingEvent;
 
-namespace Modules.Logging.LocalLogging
+namespace NetModules.Logging.LocalLogging
 {
     /// <summary>
-    /// A basic logging module. This module writes all LoggingEvent data to the console output when available and also
-    /// writes error logs to a file in the Module.WorkingDirectory path using log rotation.
+    /// A basic local logging module. This module writes all LoggingEvent data to the console output when available,
+    /// and can also write logs to a file in a location relative to the Module.WorkingDirectory path using log rotation.
     /// </summary>
     [Serializable]
     [Module(
         LoadFirst = true, LoadPriority = short.MinValue + 1, HandlePriority = short.MaxValue,
-        Description = "A basic logging module. This module writes all LoggingEvent data to the console output when "
-        + "available and also writes error logs to a file in the Module.WorkingDirectory path using log rotation."
+        Description = "A basic local logging module. This module writes all LoggingEvent data to the console output when available, "
+        + "and can also write logs to a file in a location relative to the Module.WorkingDirectory path using log rotation."
     )]
     public class LoggingModule : Module
     {
         LoggingHandler LoggingHandler;
 
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public override bool CanHandle(IEvent e)
         {
             if (e is LoggingEvent
@@ -35,6 +39,10 @@ namespace Modules.Logging.LocalLogging
             return false;
         }
 
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public override void Handle(IEvent e)
         {
             if (e is LoggingEvent @event)
@@ -67,22 +75,25 @@ namespace Modules.Logging.LocalLogging
 
             if (e is SetLoggingLevelEvent set)
             {
-                LoggingHandler.SetLevelEvent(set);
+                LoggingHandler.SetLogLevelEvent(set);
                 return;
             }
         }
 
-        public override void OnLoaded()
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public override void OnLoading()
         {
-            var logLevel = GetSetting("consoleLogLevel", string.Empty);
-            var fileLogLevel = !string.IsNullOrEmpty(logLevel)
+            var logLevel = GetSetting("consoleLogLevel", "debug");
+            var consoleLogLevel = !string.IsNullOrEmpty(logLevel)
                 && Enum.TryParse<LoggingEvent.Severity>(logLevel, true, out var ll)
                 ? ll
                 : LoggingEvent.Severity.Error;
 
-            logLevel = GetSetting("fileLogLevel", string.Empty);
+            logLevel = GetSetting("fileLogLevel", "error");
             
-            var consoleLogLevel = !string.IsNullOrEmpty(logLevel)
+            var fileLogLevel = !string.IsNullOrEmpty(logLevel)
                 && Enum.TryParse<LoggingEvent.Severity>(logLevel, true, out ll)
                 ? ll
                 : LoggingEvent.Severity.Error;
@@ -94,23 +105,29 @@ namespace Modules.Logging.LocalLogging
                     var arg = Host.Arguments[i].ToLowerInvariant();
                     if ((arg == "-loglevel" || arg == "-log" || arg == "-l") && Host.Arguments.Count > i)
                     {
-                        var value = Host.Arguments[i + 1].ToLowerInvariant();
+                        var value = Host.Arguments[i + 1].ToLowerInvariant().Trim('"');
 
-                        switch (value.Trim('"'))
+                        switch (value)
                         {
-                            case "debug":
-                                fileLogLevel = LoggingEvent.Severity.Debug;
+                            case "trace":
+                                fileLogLevel = Severity.Trace;
                                 break;
-                            case "analytics":
+                            case "debug":
+                                fileLogLevel = Severity.Debug;
+                                break;
                             case "information":
                             case "info":
-                                fileLogLevel = LoggingEvent.Severity.Information;
+                                fileLogLevel = Severity.Information;
                                 break;
+                            case "warn":
                             case "warning":
-                                fileLogLevel = LoggingEvent.Severity.Warning;
+                                fileLogLevel = Severity.Warning;
+                                break;
+                            case "err":
+                            case "error":
+                                fileLogLevel = Severity.Error;
                                 break;
                             default:
-                                fileLogLevel = LoggingEvent.Severity.Error;
                                 break;
                         }
                         
@@ -120,19 +137,7 @@ namespace Modules.Logging.LocalLogging
             }
 
             LoggingHandler = new LoggingHandler(this, consoleLogLevel, fileLogLevel);
-            base.OnLoaded();
-        }
-
-
-        public override void OnLoading()
-        {
-            base.OnLoaded();
-        }
-
-
-        public override void OnUnloading()
-        {
-            base.OnUnloading();
+            base.OnLoading();
         }
     }
 }

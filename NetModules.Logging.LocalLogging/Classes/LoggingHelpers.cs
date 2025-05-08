@@ -1,22 +1,18 @@
 ﻿using System;
-using System.Text;
 using System.Collections.Generic;
-using NetModules;
-using NetModules.Interfaces;
 using NetTools.Serialization;
+using NetModules.Interfaces;
 using NetModules.Events;
 
-namespace Modules.Logging.LocalLogging.Classes
+namespace NetModules.Logging.LocalLogging.Classes
 {
     internal static class LoggingHelpers
     {
         /// <summary>
         /// Returns the logging arguments as a printable string.
         /// </summary>
-        internal static string[] GetPrintableArgs(object[] args, out LoggingEvent.Severity logLevel)
+        internal static string[] GetPrintableArgs(object[] args)
         {
-            logLevel = LoggingEvent.Severity.Debug;
-            
             if (args == null)
             {
                 return new string[0];
@@ -28,13 +24,6 @@ namespace Modules.Logging.LocalLogging.Classes
             {
                 var arg = args[i];
 
-                if (arg is LoggingEvent.Severity severity)
-                {
-                    logLevel = severity;
-                    printable.Add(severity.ToString().ToUpperInvariant());
-                    continue;
-                }
-
                 if (arg == null || arg is string s && string.IsNullOrWhiteSpace(s))
                 {
                     continue;
@@ -43,15 +32,16 @@ namespace Modules.Logging.LocalLogging.Classes
                 if (arg is Exception ex)
                 {
                     printable.Add(UnwrapException(ex));
+                    continue;
                 }
-                else if (arg is IEvent @event)
+                
+                if (arg is IEvent @event)
                 {
                     printable.Add(arg.ToJson().BeautifyJson());
+                    continue;
                 }
-                else
-                {
-                    printable.Add(arg.ToString());
-                }
+
+                printable.Add(arg.ToString());
             }
 
             return printable.ToArray();
@@ -82,7 +72,7 @@ namespace Modules.Logging.LocalLogging.Classes
 
 
         /// <summary>
-        /// 
+        /// Get a Console Foreground Color based on the logging severity.
         /// </summary>
         internal static ConsoleColor GetLoggingColor(LoggingEvent.Severity severity)
         {
