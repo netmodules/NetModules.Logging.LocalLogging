@@ -1,6 +1,6 @@
 # NetModules.Logging.LocalLogging
 
-**NetModules.Logging.LocalLogging** is a [NetModules](https://github.com/netmodules/NetModules) module that handles the built in [LoggingEvent](https://github.com/netmodules/NetModules/blob/main/NetModules/Events/LoggingEvent.cs) and outputs to Console 8f available, as well as logging to local files.
+**NetModules.Logging.LocalLogging** is a [NetModules](https://github.com/netmodules/NetModules) module that handles the built in [LoggingEvent](https://github.com/netmodules/NetModules/blob/main/NetModules/Events/LoggingEvent.cs) and outputs to Console if available, as well as logging to local files.
 
 Every loaded Module in a loaded ModuleHost can raise a `LoggingEvent` either mannually by instantiating and sending it to Host.Handle, or by using the [this.Log(severity, arguments)](https://github.com/netmodules/NetModules/blob/main/NetModules/Interfaces/IModule.cs#L81) wrapper method.
 
