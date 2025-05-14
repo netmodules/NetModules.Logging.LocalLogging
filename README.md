@@ -13,7 +13,7 @@ The **NetModules.Logging.LocalLogging** module handles and exposes its own event
 
 ### These events are as follows:
 
-- **LastLine**: Returns the last `LoggingEvent` record in the event otput.
+- **LastLine**: Returns the last `LoggingEvent` record in the event output.
 - **ReadLogFile**: Returns n lines from the local log file in the event output.
 - **SearchLogFile**: Returns n lines from the local log file that match a query in the event output.
 - **SetLoggingLevel**: Allows you to dynamically override the logging level for a selected logger at runtime. This may be useful if you need to read a level urgently.
@@ -50,5 +50,7 @@ This project must always strictly adhere to the [NetModules](https://github.com/
 NetModules.Logging.LocalLogging is licensed under the [MIT License](https://tldrlegal.com/license/mit-license), allowing unrestricted use, modification, and distribution. If you use NetModules.Logging.LocalLogging in your own project, we’d love to hear about your experience, and possibly feature you on our website!
 
 Full documentation coming soon!
+
+This project references [NetTools.Logging](https://github.com/netmodules/NetTools.Logging) for strict [ILogger](https://github.com/netmodules/NetTools.Logging/blob/master/NetTools.Logging/ILogger.cs) implementation and unified Logger invocation.
 
 [NetModules Foundation](https://netmodules.net/)
